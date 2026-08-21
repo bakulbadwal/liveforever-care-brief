@@ -1,9 +1,12 @@
 # LiveForever
 
-### A privacy-first personal evidence lab for testable wellness experiments
+### Personal evidence, ready for review
 
 > **OpenAI Build Week 2026 · Apps for Your Life**
 > A public, synthetic-data extension of a private personal-health prototype, meaningfully built with Codex and GPT-5.6 during Build Week.
+
+> **Break the Barrier 2026 · Healthcare workflow extension**
+> A source-linked Care Brief that turns a tested personal signal into a concise, user-controlled draft for clinician review.
 
 **[Open the live demo](https://bakulbadwal.github.io/liveforever-buildweek/)** · [Product case study](CASE_STUDY.md) · [Build Week provenance](docs/BUILD_WEEK_PROVENANCE.md) · [Technical method](docs/TECHNICAL_METHOD.md)
 
@@ -11,9 +14,9 @@
 
 > **Submission record:** The judged Build Week artifact is frozen at commit [`6978bcd`](https://github.com/bakulbadwal/liveforever-buildweek/commit/6978bcdddb418af799d6023c1d4b1b36c2fcf4a7). The interface shown below is a presentation-only portfolio redesign prepared after the submission deadline; the analysis engine, synthetic record, results, and privacy boundaries are unchanged. The submitted interface is preserved in [`demo/index-buildweek.html`](demo/index-buildweek.html).
 
-[![LiveForever personal evidence lab showing the recovery question, comparison timeline, experiment view, and data methods](docs/liveforever-evidence-lab.png)](https://bakulbadwal.github.io/liveforever-buildweek/)
+[![LiveForever Care Brief showing a source-linked recovery signal, evidence ledger, uncertainty, and clinician questions](docs/liveforever-care-brief.png)](https://bakulbadwal.github.io/liveforever-buildweek/#care)
 
-LiveForever combines longitudinal wearable signals, habit logs, laboratory trends, and cautious genomic context to answer one practical question at a time:
+LiveForever combines longitudinal wearable signals, habit logs, laboratory trends, and cautious genomic context to answer one practical question at a time, then prepares the result for a more useful clinical conversation:
 
 > What appears to affect my recovery, how uncertain is that signal, and how can I test it more carefully?
 
@@ -23,7 +26,8 @@ The hosted demo needs no login, API key, external health service, or live model 
 
 1. Use **Snapshot** to compare the primary result, supporting metrics, and nightly recovery timeline.
 2. Toggle the chart between **HRV** and **Sleep**, then hover or tab through individual observations.
-3. Open **Experiment** for the balanced 14-day schedule, then use **Data & methods** to inspect context and calculation provenance.
+3. Open **Care brief** to inspect the source-linked handoff, clinician questions, and user-controlled print path.
+4. Open **Experiment** for the balanced 14-day schedule, then use **Data & methods** to inspect context and calculation provenance.
 
 The demo examines whether stopping caffeine by 2 PM is associated with better next-day recovery across 73 paired nights. It reports a `+3.94 ms` HRV difference with a 95% interval of `+1.13 to +6.42` and keeps the result explicitly labeled as an **association only**.
 
@@ -35,6 +39,23 @@ The demo examines whether stopping caffeine by 2 PM is associated with better ne
 - **Uncertainty stays visible:** minimum-sample warnings, missingness, group balance, confidence intervals, and known confounders remain part of the product experience.
 - **Genetics is context, not a verdict:** a synthetic CYP1A2 marker can prioritize a question but never determines a recommendation.
 - **Local-first privacy:** raw health and genomic records remain local and outside model output, commits, screenshots, and the public demo.
+- **A reviewable handoff, not an AI diagnosis:** the Care Brief carries sources, uncertainty, missing evidence, and clinician questions into a concise user-controlled document.
+
+## Break The Barrier Extension
+
+The original Build Week release proved a privacy-safe personal evidence workflow. The Break the Barrier branch addresses the next failure point: useful patient-generated data rarely arrives at a clinical visit in a concise, traceable form.
+
+The extension adds:
+
+- A deterministic `care_brief` contract built from the existing analysis and experiment plan.
+- A source ledger for wearables, habit logs, laboratory context, and genomic hypothesis context.
+- Explicit uncertainty and missing-evidence sections that travel with the result.
+- Questions that help a clinician review relevance, alternative explanations, and next measurements.
+- A model contract that locks calculations and forbids diagnosis, prescribing, invented evidence, or causal upgrades.
+- A responsive Care Brief view with a user-controlled print path; the demo transmits nothing and contains no PHI.
+- Six new care-brief tests, bringing the focused suite to 17 tests.
+
+This is a workflow prototype, not an EHR integration or clinical device. The intended value is better visit preparation and more efficient review, while preserving professional judgment and the user's control over sharing.
 
 ## Built With Codex And GPT-5.6
 
@@ -64,7 +85,7 @@ The hosted website intentionally avoids a browser-side API key or backend model 
 
 ### Post-submission portfolio iteration
 
-After the deadline, the submitted commit was frozen and a separate local branch was created for presentation improvements. This iteration replaces scroll-only navigation with three real client-side views, shortens repetitive interface copy, adds keyboard-accessible chart details, moves genomic context into Data & methods, and adds creator attribution. It does not add analyses, alter results, introduce real data, or change the Build Week submission materials.
+After the deadline, the submitted commit was frozen and a separate branch was created for presentation improvements. That iteration replaced scroll-only navigation with three real client-side views, shortened repetitive interface copy, added keyboard-accessible chart details, moved genomic context into Data & methods, and added creator attribution. The subsequent Break the Barrier branch adds the Care Brief workflow while preserving the submitted Build Week artifact and its results.
 
 ## How It Works
 
@@ -72,17 +93,18 @@ After the deadline, the submitted commit was frozen and a separate local branch 
 flowchart LR
     A["Local wearables, habits, labs, and genomic context"] --> B["Deterministic Python evidence engine"]
     B --> C["Immutable analysis.json contract"]
-    C --> D["GPT-5.6 through the Codex Skill"]
-    D --> E["Explanation, limitations, and adapted next test"]
+    C --> D["Bounded AI through the Agent Skill"]
+    D --> E["Explanation, missing context, and clinician questions"]
     C --> F["Interactive evidence dashboard"]
+    C --> G["Source-linked Care Brief"]
 ```
 
 | Layer | Responsibility |
 |---|---|
 | Deterministic Python | Effects, intervals, lags, quality checks, PhenoAge, schedule, and provenance |
 | `analysis.json` | Immutable interface between calculation and interpretation |
-| GPT-5.6 Skill | Question framing, source review, explanation, alternative hypotheses, and bounded plan adaptation |
-| Web demo | Inspectable visualization of the fictional evidence record |
+| Agent Skill | Question framing, source review, explanation, alternative hypotheses, and bounded care-brief preparation |
+| Web demo | Inspectable visualization and user-controlled clinical handoff for the fictional evidence record |
 
 ## Demonstration Record
 
@@ -122,10 +144,10 @@ $liveforever-evidence-lab Investigate whether my caffeine timing is associated w
 
 ## Project Map
 
-- [`src/liveforever_lab/`](src/liveforever_lab/) · Deterministic analysis, genomics, PhenoAge, synthetic data, and planning.
-- [`SKILL.md`](SKILL.md) · GPT-5.6 workflow, responsibilities, forbidden behavior, and claim language.
+- [`src/liveforever_lab/`](src/liveforever_lab/) · Deterministic analysis, care-brief contract, genomics, PhenoAge, synthetic data, and planning.
+- [`SKILL.md`](SKILL.md) · Bounded AI workflow, responsibilities, forbidden behavior, and care-brief format.
 - [`demo/`](demo/) · Static interactive application, generated analysis contract, and preserved Build Week interface.
-- [`tests/`](tests/) · Eleven focused tests for analysis and context behavior.
+- [`tests/`](tests/) · Seventeen focused tests for analysis, context, and care-brief behavior.
 - [`docs/`](docs/) · Technical method, provenance, submission copy, demo script, and checklist.
 
 ## Privacy And Safety

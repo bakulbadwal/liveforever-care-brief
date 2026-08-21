@@ -62,6 +62,7 @@
 
     var a = payload.analysis;
     var p = payload.plan;
+    var brief = payload.care_brief;
     var primary = a.primary_effect;
     var sleep = a.secondary_effects.find(function (item) {
       return item.outcome === 'sleep_hours';
@@ -99,6 +100,29 @@
 
     var calculations = a.calculation_provenance.map(function (item) {
       return '<div>' + item + '</div>';
+    }).join('');
+
+    var careSources = brief.source_ledger.map(function (source) {
+      return [
+        '<div class="care-source">',
+        '<div><span>', source.label, '</span><strong>', source.status, '</strong></div>',
+        '<p>', source.provenance, '</p>',
+        '</div>'
+      ].join('');
+    }).join('');
+
+    var uncertainty = brief.uncertainty.map(function (item) {
+      return '<li>' + item + '</li>';
+    }).join('');
+
+    var missingEvidence = brief.missing_evidence.map(function (item) {
+      return '<li>' + item + '</li>';
+    }).join('');
+
+    var clinicianQuestions = brief.questions_for_clinician.map(function (item, index) {
+      return [
+        '<li><span>', String(index + 1).padStart(2, '0'), '</span><p>', item, '</p></li>'
+      ].join('');
     }).join('');
 
     document.getElementById('app').innerHTML = [
@@ -195,11 +219,87 @@
               '<div class="reading-fact"><span>Data grade</span><strong>', a.quality.grade, ' &middot; ', a.quality.score, '/100</strong></div>',
             '</div>',
             '<div class="actions">',
-              '<button class="button primary" type="button" data-go="experiment">View 14-day retest</button>',
-              '<button class="button" type="button" data-open-method="true">Inspect method</button>',
+              '<button class="button primary" type="button" data-go="care">Prepare care brief</button>',
+              '<button class="button" type="button" data-go="experiment">View 14-day retest</button>',
             '</div>',
           '</aside>',
         '</div>',
+      '</section>',
+
+      '<section class="view" id="view-care" data-view-panel="care" hidden>',
+        '<div class="care-titlebar">',
+          '<div class="page-intro">',
+            '<p class="kicker">Care brief &middot; draft for review</p>',
+            '<h1>Bring the signal, not the spreadsheet.</h1>',
+            '<p>A concise, source-linked summary a person can review before deciding whether to share it with a clinician.</p>',
+          '</div>',
+          '<div class="care-actions">',
+            '<span>Nothing is transmitted</span>',
+            '<button class="button primary" type="button" data-print-brief="true">Print brief</button>',
+          '</div>',
+        '</div>',
+
+        '<article class="care-sheet" id="care-sheet" aria-labelledby="care-question">',
+          '<header class="care-sheet-head">',
+            '<div>',
+              '<span class="document-label">LiveForever personal evidence brief</span>',
+              '<h2 id="care-question">', brief.visit_question, '</h2>',
+              '<p>', brief.why_this_visit, '</p>',
+            '</div>',
+            '<dl>',
+              '<div><dt>Person</dt><dd>', brief.persona, '</dd></div>',
+              '<div><dt>Record</dt><dd>', brief.privacy.record_type, '</dd></div>',
+              '<div><dt>Status</dt><dd>Draft for review</dd></div>',
+            '</dl>',
+          '</header>',
+
+          '<section class="care-signal" aria-labelledby="care-signal-heading">',
+            '<div>',
+              '<span class="document-label">Observed signal</span>',
+              '<h3 id="care-signal-heading">', signed(primary.effect), ' ms higher nightly HRV</h3>',
+              '<p>', brief.plain_language_signal, '</p>',
+            '</div>',
+            '<div class="care-lock">',
+              '<span aria-hidden="true">&#10003;</span>',
+              '<p><strong>Values locked by code</strong>AI can explain this result, but cannot rewrite its effect, interval, samples, or sources.</p>',
+            '</div>',
+          '</section>',
+
+          '<div class="care-columns">',
+            '<section class="care-block" aria-labelledby="care-source-heading">',
+              '<div class="care-block-head"><span>01</span><div><h3 id="care-source-heading">Evidence reviewed</h3><p>Every source stays attached to its role.</p></div></div>',
+              '<div class="care-source-list">', careSources, '</div>',
+            '</section>',
+
+            '<section class="care-block" aria-labelledby="care-uncertainty-heading">',
+              '<div class="care-block-head"><span>02</span><div><h3 id="care-uncertainty-heading">What remains uncertain</h3><p>Limitations travel with the summary.</p></div></div>',
+              '<ul class="care-list">', uncertainty, '</ul>',
+              '<details class="missing-details">',
+                '<summary>Missing evidence to consider</summary>',
+                '<ul>', missingEvidence, '</ul>',
+              '</details>',
+            '</section>',
+          '</div>',
+
+          '<section class="care-questions" aria-labelledby="care-questions-heading">',
+            '<div class="care-block-head"><span>03</span><div><h3 id="care-questions-heading">Questions for a clinician</h3><p>The AI prepares the agenda; the clinician supplies medical judgment.</p></div></div>',
+            '<ol>', clinicianQuestions, '</ol>',
+          '</section>',
+
+          '<footer class="care-sheet-foot">',
+            '<div><strong>User-controlled handoff</strong><p>', brief.privacy.sharing_control, '</p></div>',
+            '<div><strong>Boundary</strong><p>', brief.review_status, '</p></div>',
+          '</footer>',
+        '</article>',
+
+        '<section class="ai-role-band" aria-labelledby="ai-role-heading">',
+          '<div>',
+            '<p class="kicker">Bounded AI layer</p>',
+            '<h2 id="ai-role-heading">AI prepares the review. It does not own the evidence.</h2>',
+            '<p>', brief.ai_contract.role, ' ', brief.ai_contract.human_gate, '</p>',
+          '</div>',
+          '<button class="button" type="button" data-open-method="true">Inspect the contract</button>',
+        '</section>',
       '</section>',
 
       '<section class="view" id="view-experiment" data-view-panel="experiment" hidden>',
@@ -296,7 +396,7 @@
     drawChart(a.timeline, state.metric);
 
     var initialView = window.location.hash.replace('#', '');
-    setView(['overview', 'experiment', 'data'].indexOf(initialView) >= 0 ? initialView : 'overview', false);
+    setView(['overview', 'care', 'experiment', 'data'].indexOf(initialView) >= 0 ? initialView : 'overview', false);
   }
 
   function bindControls() {
@@ -324,6 +424,12 @@
         var method = document.getElementById('method-details');
         method.open = true;
         method.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      });
+    });
+
+    document.querySelectorAll('[data-print-brief]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        window.print();
       });
     });
   }
@@ -500,7 +606,7 @@
 
   window.addEventListener('popstate', function () {
     var view = window.location.hash.replace('#', '') || 'overview';
-    if (['overview', 'experiment', 'data'].indexOf(view) >= 0) {
+    if (['overview', 'care', 'experiment', 'data'].indexOf(view) >= 0) {
       setView(view, false);
     }
   });

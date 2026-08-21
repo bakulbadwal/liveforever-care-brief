@@ -1,7 +1,7 @@
 [project]
 name = "liveforever-lab"
-version = "0.2.0"
-description = "A privacy-first personal evidence lab for longitudinal wellness experiments"
+version = "0.3.0"
+description = "A privacy-first personal evidence lab and source-linked care brief"
 requires-python = ">=3.11"
 dependencies = []
 
@@ -14,4 +14,3 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/liveforever_lab"]
-

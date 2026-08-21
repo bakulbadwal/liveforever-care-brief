@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from .analysis import analyze_dataset, load_csv
+from .care_brief import build_care_brief
 from .genomics import caffeine_hypothesis, parse_23andme
 from .phenoage import calculate
 from .planner import build_plan
@@ -24,7 +25,12 @@ def build_demo(data_path: Path, output_path: Path) -> dict:
         genomics_context=caffeine_hypothesis(parse_23andme(genome_path)),
         longevity_snapshot=calculate(SYNTHETIC_LABS).as_dict(),
     )
-    payload = {"analysis": analysis, "plan": build_plan(analysis)}
+    plan = build_plan(analysis)
+    payload = {
+        "analysis": analysis,
+        "plan": plan,
+        "care_brief": build_care_brief(analysis, plan),
+    }
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return payload

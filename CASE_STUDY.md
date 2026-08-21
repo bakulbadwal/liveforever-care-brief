@@ -1,7 +1,7 @@
 # Case Study — LiveForever
 ### A product-thinking write-up (not a README). To run it, see [README](./README.md) or the [live demo](https://bakulbadwal.github.io/liveforever-buildweek/); this is the *why*.
 
-A privacy-first personal evidence lab that turns a longitudinal health history into one testable wellness question, an uncertainty-aware evidence record, and a bounded next experiment.
+A privacy-first personal evidence lab that turns a longitudinal health history into one testable wellness question, an uncertainty-aware evidence record, a bounded next experiment, and a source-linked brief for clinician review.
 
 > Honest framing up front: the public Build Week project uses one fictional persona and deliberately generated signals. It is a privacy-safe extension of a richer private prototype, not a clinical product and not a claim that synthetic results generalize to real people. The product reasoning — how to divide responsibility among code, an AI model, and the user — is the point.
 
@@ -17,7 +17,13 @@ The unmet job is not another dashboard. It is: **help me turn my own history int
 
 The primary user is a serious self-tracker who has enough longitudinal data to notice patterns but not a reliable way to distinguish a real personal signal from noise, missingness, imbalance, or concurrent changes.
 
-It is deliberately *not* positioned as a clinician, medical-device workflow, or universal recommendation engine. A user should leave with a better experiment and a more honest view of their own evidence — not an AI prescription.
+It is deliberately *not* positioned as a clinician, medical device, or universal recommendation engine. A user should leave with a better experiment, a more honest view of their own evidence, and better questions for an appropriate professional — not an AI prescription.
+
+## The Break the Barrier evolution: make the evidence portable
+
+The Build Week product helped a person inspect a signal. The healthcare workflow problem begins when that person needs to discuss it: years of wearable, habit, laboratory, and genomic context rarely fit into a short visit, while raw exports create more review work rather than less.
+
+The Care Brief turns the same locked analysis into a compact handoff with four things clinicians can scan: the question, the observed signal, the source ledger, and the uncertainty. The AI layer prepares plain-language context and questions, but deterministic code owns every number and the user controls whether anything is printed or shared. This evolves LiveForever from a self-tracking dashboard into a patient-to-clinician preparation workflow without pretending to integrate with an EHR or practice medicine.
 
 ## The sharpest decision: do not build an “AI health coach”
 
@@ -50,7 +56,8 @@ That sequence prevents a plausible biological story from being mistaken for proo
 | **A replication plan over a recommendation** | An observational result should produce a better next test, not a confident instruction. | The product may feel less decisive. That restraint is intentional. |
 | **One coherent fictional persona over anonymized personal records** | Longitudinal health and genomic data can remain identifying even after obvious fields are removed. Synthetic data demonstrates the complete workflow without creating that exposure. | It cannot prove real-world efficacy. The public artifact proves product and engineering judgment, not clinical validity. |
 | **A guided evidence path over a generic chat-first interface** | Users need to inspect how a comparison became a claim and what happens next. | Less open-ended than chat. The constrained path is the product. |
-| **Static hosted demo plus an Agent Skill over a new backend** | Judges and users can test the product with no account, key, database, or privacy risk; GPT-5.6 operates through the included Skill. | No multi-user persistence or live model call in the browser. Those are future needs, not current ones. |
+| **Static hosted demo plus an Agent Skill over a new backend** | Judges and users can test the product with no account, key, database, or privacy risk; the bounded AI workflow operates through the included Skill. | No multi-user persistence or live model call in the browser. Those are future needs, not current ones. |
+| **User-controlled Care Brief over automatic EHR delivery** | A person can verify the evidence and decide what to share before any clinical handoff. | Less automation. Correct for a prototype that has not yet earned production health-data trust. |
 
 ## How I would measure success
 
@@ -66,7 +73,7 @@ That sequence prevents a plausible biological story from being mistaken for proo
 2. **Experiment registry and adherence** — pre-register the exposure, outcome, lag, controls, and decision rule; then distinguish planned analysis from exploratory follow-up.
 3. **Longitudinal decision journal** — retain what was tested, what remained inconclusive, and which behaviors were adopted, rejected, or scheduled for replication.
 4. **Model eval harness** — test GPT-5.6 explanations against fixed evidence records for numerical fidelity, causal language, source quality, and safety-boundary adherence.
-5. **Clinician-shareable export** — a concise evidence record a user can bring to an appropriate professional, without presenting the product itself as medical advice.
+5. **Validated clinical handoff** — test whether the Care Brief reduces visit-preparation time and improves question quality before considering secure EHR or patient-portal integration.
 
 ## Honest limitations
 

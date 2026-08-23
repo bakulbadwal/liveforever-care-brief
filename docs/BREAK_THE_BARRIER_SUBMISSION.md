@@ -6,7 +6,7 @@
 
 ## Recommended entry
 
-Submit **LiveForever Care Brief** as a materially evolved version of the existing public prototype. The OpenAI Build Week submission remains preserved at its frozen commit; this branch adds a distinct healthcare workflow focused on patient-to-clinician review.
+Submit **LiveForever Care Brief** as a materially evolved, independently published version of the existing public prototype. The OpenAI Build Week submission remains preserved in its original repository at the frozen judged commit; this repository adds a distinct healthcare workflow focused on patient-to-clinician review.
 
 ## Form answers
 
@@ -44,9 +44,9 @@ https://www.linkedin.com/in/bakulbadwal/
 
 ### Public project links
 
-- Demo: https://bakulbadwal.github.io/liveforever-buildweek/#care
-- Repository: https://github.com/bakulbadwal/liveforever-buildweek
-- Case study: https://github.com/bakulbadwal/liveforever-buildweek/blob/main/CASE_STUDY.md
+- Demo: https://bakulbadwal.github.io/liveforever-care-brief/#care
+- Repository: https://github.com/bakulbadwal/liveforever-care-brief
+- Case study: https://github.com/bakulbadwal/liveforever-care-brief/blob/main/CASE_STUDY.md
 
 The form does not provide a repository field. Put the demo and repository URLs on the video's final frame. The optional Google Drive field is not used to determine finalists, so leave it blank unless a later submission package contains crucial context that cannot fit in the video.
 

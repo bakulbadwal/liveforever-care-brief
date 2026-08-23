@@ -4,7 +4,7 @@
   var state = {
     payload: null,
     metric: 'hrv_ms',
-    view: 'overview'
+    view: 'care'
   };
 
   var metricMeta = {
@@ -387,7 +387,7 @@
 
         '<div class="privacy-band">',
           '<div><strong>Privacy by design</strong><p>Every record in this public demo is synthetic. No login, external health service, API key, or personal health data is used.</p></div>',
-          '<a class="button" href="https://github.com/bakulbadwal/liveforever-buildweek" target="_blank" rel="noreferrer">View source</a>',
+          '<a class="button" href="https://github.com/bakulbadwal/liveforever-care-brief" target="_blank" rel="noreferrer">View source</a>',
         '</div>',
       '</section>'
     ].join('');
@@ -396,7 +396,7 @@
     drawChart(a.timeline, state.metric);
 
     var initialView = window.location.hash.replace('#', '');
-    setView(['overview', 'care', 'experiment', 'data'].indexOf(initialView) >= 0 ? initialView : 'overview', false);
+    setView(['overview', 'care', 'experiment', 'data'].indexOf(initialView) >= 0 ? initialView : 'care', false);
   }
 
   function bindControls() {
@@ -605,7 +605,7 @@
   });
 
   window.addEventListener('popstate', function () {
-    var view = window.location.hash.replace('#', '') || 'overview';
+    var view = window.location.hash.replace('#', '') || 'care';
     if (['overview', 'care', 'experiment', 'data'].indexOf(view) >= 0) {
       setView(view, false);
     }

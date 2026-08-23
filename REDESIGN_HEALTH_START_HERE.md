@@ -1,8 +1,11 @@
 # Redesign Health / Break the Barrier — Start Here
 
-**Deadline:** November 1, 2026 at 11:59 PM Eastern  
-**Status:** Product extension built and committed locally; video and form submission intentionally deferred.  
-**Local branch:** `break-the-barrier-care-brief`  
+**Deadline:** November 1, 2026 at 11:59 PM Eastern
+
+**Status:** Product extension published independently; video and form submission intentionally deferred.
+
+**Repository:** `bakulbadwal/liveforever-care-brief`
+
 **Core implementation commit:** `13d7dd9` (`Build source-linked LiveForever Care Brief`)
 
 ## Official submission form
@@ -38,11 +41,11 @@ The public demo contains one fictional persona, Maya Chen, and no PHI. It does n
 
 ## Resume this later in five steps
 
-1. Confirm that the OpenAI Build Week repository freeze has ended after the Aug. 25 winners announcement.
-2. Push `break-the-barrier-care-brief` to the existing public repository, then merge it into `main` when ready to update the hosted demo.
-3. Record the new 3.5- to 4.5-minute MP4 using the prepared script. The old Build Week video does not show the Care Brief and should not be reused as the primary submission.
-4. Paste the prepared bio and Healthcare Problem Scope & Impact response into the Google Form.
-5. Upload the MP4, review the terms yourself, submit, and retain the emailed receipt.
+1. Open the independent public demo and verify the Care Brief is still the default view.
+2. Record the new 3.5- to 4.5-minute MP4 using the prepared script. The old Build Week video does not show the Care Brief and should not be reused as the primary submission.
+3. Paste the prepared bio and Healthcare Problem Scope & Impact response into the Google Form.
+4. Upload the MP4, review the terms yourself, submit, and retain the emailed receipt.
+5. If the product changes before November 1, resubmit the form; only the most recent entry is evaluated.
 
 ## Submission files
 
@@ -50,7 +53,9 @@ The public demo contains one fictional persona, Maya Chen, and no PHI. It does n
 - [`docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md`](docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md) — timed screen order and narration.
 - [`docs/BREAK_THE_BARRIER_CHECKLIST.md`](docs/BREAK_THE_BARRIER_CHECKLIST.md) — final recording and submission checklist.
 - [`docs/BREAK_THE_BARRIER_PROVENANCE.md`](docs/BREAK_THE_BARRIER_PROVENANCE.md) — what existed before and what this extension added.
-- [`docs/liveforever-care-brief.png`](docs/liveforever-care-brief.png) — current Care Brief hero image.
+- [`docs/liveforever-care-brief-hero.png`](docs/liveforever-care-brief-hero.png) — README hero image.
+- [`docs/liveforever-care-brief-v2.png`](docs/liveforever-care-brief-v2.png) — current desktop Care Brief screenshot.
+- [`docs/liveforever-care-brief-mobile.png`](docs/liveforever-care-brief-mobile.png) — current mobile Care Brief screenshot.
 - [`README.md`](README.md) — public product and technical overview.
 - [`CASE_STUDY.md`](CASE_STUDY.md) — product rationale and tradeoffs.
 
@@ -60,4 +65,4 @@ Use a **new product-demo video** as the one required upload. It demonstrates the
 
 ## Repository strategy
 
-Keep this as an evolution of the existing LiveForever repository rather than creating a fork or duplicate repository. The branch and provenance file separate the healthcare extension from the frozen OpenAI submission while preserving one coherent product history. A fork is designed mainly for contributing back to someone else's repository and adds no value here.
+Use an independent public repository for the Break the Barrier product while retaining the original Git history and explicit provenance. This keeps the frozen OpenAI submission and its deployment untouched, gives the healthcare workflow its own `main` branch and Pages URL, and still makes the evolution auditable. This is a new repository, not a GitHub fork; forks are primarily for contributing back to someone else's repository.

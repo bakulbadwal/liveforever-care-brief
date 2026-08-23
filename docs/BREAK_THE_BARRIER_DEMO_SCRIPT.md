@@ -4,7 +4,7 @@ Target length: **3:45 to 4:20**. Record a clean screen walkthrough; camera bubbl
 
 ## 0:00–0:35 — The barrier
 
-**Show:** Snapshot view, with the full interface visible.
+**Show:** Care Brief view, with the full interface visible.
 
 “People accumulate years of health context across wearables, laboratory portals, habit logs, and genomic files, but very little of it becomes useful during a short clinical visit. Patients arrive with memory and screenshots; clinicians receive either too little context or an unstructured data dump. LiveForever turns one longitudinal question into traceable evidence and a concise brief for review.”
 
@@ -45,6 +45,6 @@ Target length: **3:45 to 4:20**. Record a clean screen walkthrough; camera bubbl
 Final frame:
 
 - **LiveForever Care Brief**
-- `bakulbadwal.github.io/liveforever-buildweek/#care`
-- `github.com/bakulbadwal/liveforever-buildweek`
+- `bakulbadwal.github.io/liveforever-care-brief/#care`
+- `github.com/bakulbadwal/liveforever-care-brief`
 - Bakul Badwal · UVA Darden MBA '27

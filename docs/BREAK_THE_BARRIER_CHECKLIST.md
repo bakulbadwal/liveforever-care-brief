@@ -4,8 +4,7 @@ Deadline: **November 1, 2026 at 11:59 PM Eastern**. Resubmissions are allowed; o
 
 ## Before recording
 
-- [ ] Wait until the OpenAI Build Week repository freeze has ended and the Aug. 25 winners announcement is public.
-- [ ] Push `break-the-barrier-care-brief` and confirm the hosted Care Brief URL loads.
+- [ ] Confirm the independent `liveforever-care-brief` repository and hosted Care Brief URL load.
 - [ ] Confirm the public page shows only Maya Chen's fictional synthetic record.
 - [ ] Run all 17 tests and confirm `demo/analysis.json` is regenerated.
 - [ ] Open four tabs: Snapshot, Care brief, Experiment, and Data & methods.
@@ -37,4 +36,4 @@ Deadline: **November 1, 2026 at 11:59 PM Eastern**. Resubmissions are allowed; o
 - [ ] Do not claim clinical validation, EHR integration, diagnosis, treatment, or real patient outcomes.
 - [ ] Describe the result as a deliberately generated synthetic signal.
 - [ ] Describe the Care Brief as user-controlled and clinician-reviewable, not clinician-approved.
-- [ ] Confirm the repository clearly separates the preserved Build Week artifact from the Break the Barrier extension.
+- [ ] Confirm the provenance file links the preserved Build Week artifact and identifies the Care Brief extension.

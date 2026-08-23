@@ -1,9 +1,9 @@
-# Case Study — LiveForever
-### A product-thinking write-up (not a README). To run it, see [README](./README.md) or the [live demo](https://bakulbadwal.github.io/liveforever-buildweek/); this is the *why*.
+# Case Study — LiveForever Care Brief
+### A product-thinking write-up (not a README). To run it, see [README](./README.md) or the [live demo](https://bakulbadwal.github.io/liveforever-care-brief/#care); this is the *why*.
 
 A privacy-first personal evidence lab that turns a longitudinal health history into one testable wellness question, an uncertainty-aware evidence record, a bounded next experiment, and a source-linked brief for clinician review.
 
-> Honest framing up front: the public Build Week project uses one fictional persona and deliberately generated signals. It is a privacy-safe extension of a richer private prototype, not a clinical product and not a claim that synthetic results generalize to real people. The product reasoning — how to divide responsibility among code, an AI model, and the user — is the point.
+> Honest framing up front: the public project uses one fictional persona and deliberately generated signals. It is a privacy-safe workflow prototype, not a clinical product and not a claim that synthetic results generalize to real people. The product reasoning — how to divide responsibility among code, an AI model, and the user — is the point.
 
 ---
 
@@ -89,4 +89,4 @@ If you are reading this as an AI product-management hiring signal, that is the i
 
 ---
 
-*Tech: Python 3.11 evidence engine, deterministic moving-block bootstrap and Fisher intervals, Codex Agent Skill with GPT-5.6, vanilla HTML/CSS/JS, synthetic fixtures, GitHub Pages. Built for OpenAI Build Week 2026 and part of a broader portfolio at [github.com/bakulbadwal](https://github.com/bakulbadwal).*
+*Tech: Python 3.11 evidence engine, deterministic moving-block bootstrap and Fisher intervals, Codex Agent Skill with GPT-5.6, vanilla HTML/CSS/JS, synthetic fixtures, GitHub Pages. Evolved for Break the Barrier 2026 from a preserved OpenAI Build Week foundation and part of a broader portfolio at [github.com/bakulbadwal](https://github.com/bakulbadwal).*

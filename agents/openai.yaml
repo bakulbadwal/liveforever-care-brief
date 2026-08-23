@@ -1,7 +1,6 @@
 interface:
-  display_name: "LiveForever Evidence Lab"
-  short_description: "Privacy-first personal wellness experiments"
-  default_prompt: "Use $liveforever-evidence-lab to turn this wellness question into an evidence record with uncertainty, data-quality checks, and a bounded replication plan."
+  display_name: "LiveForever Care Brief"
+  short_description: "Source-linked personal evidence for review"
+  default_prompt: "Use $liveforever-evidence-lab to turn this longitudinal wellness question into a locked evidence record, bounded replication plan, and source-linked Care Brief for human review."
 policy:
   allow_implicit_invocation: true
-

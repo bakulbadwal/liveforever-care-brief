@@ -1,20 +1,28 @@
-# LiveForever
+# LiveForever Care Brief
 
-### Personal evidence, ready for review
+### Personal evidence, ready for review.
 
-> **OpenAI Build Week 2026 · Apps for Your Life**
-> A public, synthetic-data extension of a private personal-health prototype, meaningfully built with Codex and GPT-5.6 during Build Week.
+> **Break the Barrier 2026** · A privacy-first AI workflow that turns fragmented longitudinal health data into a source-linked personal evidence brief for clinician review.
 
-> **Break the Barrier 2026 · Healthcare workflow extension**
-> A source-linked Care Brief that turns a tested personal signal into a concise, user-controlled draft for clinician review.
+[![LiveForever Care Brief in a clinician-review setting](docs/liveforever-care-brief-hero.png)](https://bakulbadwal.github.io/liveforever-care-brief/#care)
 
-**[Open the live demo](https://bakulbadwal.github.io/liveforever-buildweek/)** · [Product case study](CASE_STUDY.md) · [Build Week provenance](docs/BUILD_WEEK_PROVENANCE.md) · [Technical method](docs/TECHNICAL_METHOD.md)
+<sub>Illustrative product scene. The interface and all health records shown in this project use one fictional, fully synthetic persona.</sub>
+
+**[Try the Care Brief](https://bakulbadwal.github.io/liveforever-care-brief/#care)** · [Product case study](CASE_STUDY.md) · [Technical method](docs/TECHNICAL_METHOD.md) · [Extension provenance](docs/BREAK_THE_BARRIER_PROVENANCE.md)
+
+[![Tests](https://img.shields.io/badge/tests-17%20passing-147D69)](#run-it)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-192628)](pyproject.toml)
+[![Data](https://img.shields.io/badge/data-100%25%20synthetic-6A5D91)](#privacy-and-safety)
+[![License](https://img.shields.io/badge/license-MIT-E9B949)](LICENSE)
 
 **Bakul Badwal** · UVA Darden MBA '27
 
-> **Submission record:** The judged Build Week artifact is frozen at commit [`6978bcd`](https://github.com/bakulbadwal/liveforever-buildweek/commit/6978bcdddb418af799d6023c1d4b1b36c2fcf4a7). The interface shown below is a presentation-only portfolio redesign prepared after the submission deadline; the analysis engine, synthetic record, results, and privacy boundaries are unchanged. The submitted interface is preserved in [`demo/index-buildweek.html`](demo/index-buildweek.html).
-
-[![LiveForever Care Brief showing a source-linked recovery signal, evidence ledger, uncertainty, and clinician questions](docs/liveforever-care-brief.png)](https://bakulbadwal.github.io/liveforever-buildweek/#care)
+| Product | Implementation |
+|---|---|
+| **User:** A serious self-tracker preparing for a clinical conversation | **Evidence engine:** Deterministic Python |
+| **Barrier:** Years of personal health context rarely fit into a short visit | **AI boundary:** Explain fixed evidence; never change calculations, diagnose, or prescribe |
+| **Output:** A concise, source-linked draft the user reviews before sharing | **Public demo:** Static GitHub Pages site; no login, API key, backend, or PHI |
+| **Stage:** Working healthcare workflow prototype | **Quality:** 17 automated tests plus desktop and mobile browser verification |
 
 LiveForever combines longitudinal wearable signals, habit logs, laboratory trends, and cautious genomic context to answer one practical question at a time, then prepares the result for a more useful clinical conversation:
 
@@ -24,12 +32,14 @@ The hosted demo needs no login, API key, external health service, or live model 
 
 ## Try It In 30 Seconds
 
-1. Use **Snapshot** to compare the primary result, supporting metrics, and nightly recovery timeline.
-2. Toggle the chart between **HRV** and **Sleep**, then hover or tab through individual observations.
-3. Open **Care brief** to inspect the source-linked handoff, clinician questions, and user-controlled print path.
+1. Start in **Care brief** to inspect the source-linked handoff, uncertainty, clinician questions, and user-controlled print path.
+2. Open **Snapshot** to compare the primary result, supporting metrics, and nightly recovery timeline.
+3. Toggle the chart between **HRV** and **Sleep**, then hover or tab through individual observations.
 4. Open **Experiment** for the balanced 14-day schedule, then use **Data & methods** to inspect context and calculation provenance.
 
 The demo examines whether stopping caffeine by 2 PM is associated with better next-day recovery across 73 paired nights. It reports a `+3.94 ms` HRV difference with a 95% interval of `+1.13 to +6.42` and keeps the result explicitly labeled as an **association only**.
+
+![Source-linked LiveForever Care Brief](docs/liveforever-care-brief-v2.png)
 
 ## What Makes It Different
 
@@ -43,7 +53,7 @@ The demo examines whether stopping caffeine by 2 PM is associated with better ne
 
 ## Break The Barrier Extension
 
-The original Build Week release proved a privacy-safe personal evidence workflow. The Break the Barrier branch addresses the next failure point: useful patient-generated data rarely arrives at a clinical visit in a concise, traceable form.
+The original Build Week release proved a privacy-safe personal evidence workflow. This independently published Break the Barrier project addresses the next failure point: useful patient-generated data rarely arrives at a clinical visit in a concise, traceable form.
 
 The extension adds:
 
@@ -56,6 +66,14 @@ The extension adds:
 - Six new care-brief tests, bringing the focused suite to 17 tests.
 
 This is a workflow prototype, not an EHR integration or clinical device. The intended value is better visit preparation and more efficient review, while preserving professional judgment and the user's control over sharing.
+
+## Impact Hypothesis
+
+- **For patients and self-trackers:** less time reconstructing history, clearer uncertainty, and better questions before a visit.
+- **For clinicians:** a concise, source-linked starting point instead of screenshots or an unstructured data dump.
+- **For care delivery:** a safer bridge from patient-generated data to professional review without granting a model numerical or medical authority.
+
+The next validation step is not clinical efficacy. It is a workflow study measuring preparation time, clinician review time, source traceability, question quality, and how often users or clinicians correct or reject the draft.
 
 ## Built With Codex And GPT-5.6
 
@@ -85,7 +103,9 @@ The hosted website intentionally avoids a browser-side API key or backend model 
 
 ### Post-submission portfolio iteration
 
-After the deadline, the submitted commit was frozen and a separate branch was created for presentation improvements. That iteration replaced scroll-only navigation with three real client-side views, shortened repetitive interface copy, added keyboard-accessible chart details, moved genomic context into Data & methods, and added creator attribution. The subsequent Break the Barrier branch adds the Care Brief workflow while preserving the submitted Build Week artifact and its results.
+After the deadline, the submitted commit was frozen and a separate branch was created for presentation improvements. That iteration replaced scroll-only navigation with real client-side views, shortened repetitive interface copy, added keyboard-accessible chart details, moved genomic context into Data & methods, and added creator attribution. This separate repository adds the Care Brief workflow while preserving the submitted Build Week artifact and its results in the original repository.
+
+The original OpenAI Build Week project is preserved at [`bakulbadwal/liveforever-buildweek`](https://github.com/bakulbadwal/liveforever-buildweek), with the judged artifact frozen at commit [`6978bcd`](https://github.com/bakulbadwal/liveforever-buildweek/commit/6978bcdddb418af799d6023c1d4b1b36c2fcf4a7). See [Break the Barrier provenance](docs/BREAK_THE_BARRIER_PROVENANCE.md) for the exact extension boundary.
 
 ## How It Works
 
@@ -128,7 +148,7 @@ PYTHONPATH=src python3.11 -m liveforever_lab.cli
 python3.11 -m http.server 8765 --directory demo
 ```
 
-Open `http://localhost:8765`, or use the [hosted demo](https://bakulbadwal.github.io/liveforever-buildweek/).
+Open `http://localhost:8765/#care`, or use the [hosted demo](https://bakulbadwal.github.io/liveforever-care-brief/#care).
 
 Run the tests:
 
@@ -149,6 +169,7 @@ $liveforever-evidence-lab Investigate whether my caffeine timing is associated w
 - [`demo/`](demo/) · Static interactive application, generated analysis contract, and preserved Build Week interface.
 - [`tests/`](tests/) · Seventeen focused tests for analysis, context, and care-brief behavior.
 - [`docs/`](docs/) · Technical method, provenance, submission copy, demo script, and checklist.
+- [`docs/README.md`](docs/README.md) · Documentation index for judges and future work.
 
 ## Privacy And Safety
 

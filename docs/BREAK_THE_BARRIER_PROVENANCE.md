@@ -10,7 +10,7 @@ The original submission, private personal-health prototype, personal records, an
 
 ## New healthcare workflow
 
-The `break-the-barrier-care-brief` branch adds:
+The independent `liveforever-care-brief` repository adds:
 
 - `src/liveforever_lab/care_brief.py`, a deterministic care-brief contract.
 - A locked evidence summary that preserves the original analysis values verbatim.

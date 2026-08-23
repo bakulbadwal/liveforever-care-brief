@@ -3,7 +3,13 @@
 **Deadline:** November 1, 2026 at 11:59 PM Eastern  
 **Status:** Product extension built and committed locally; video and form submission intentionally deferred.  
 **Local branch:** `break-the-barrier-care-brief`  
-**Local commit:** `13d7dd9` (`Build source-linked LiveForever Care Brief`)
+**Core implementation commit:** `13d7dd9` (`Build source-linked LiveForever Care Brief`)
+
+## Official submission form
+
+**[Open the Break the Barrier submission form](https://docs.google.com/forms/d/e/1FAIpQLSc8nLhq33YpQeZ_pcFWJqFYFV6cJq-v8RLKfJ0zEG0KSWBcQA/viewform?pli=1)**
+
+This is the direct Google Form URL. The form may retain a draft under the Google account used to open it, but all paste-ready answers are also preserved locally below.
 
 ## What the project is
 

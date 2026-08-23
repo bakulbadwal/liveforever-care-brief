@@ -1,5 +1,9 @@
 # Break the Barrier Submission Package
 
+## Official form
+
+**[Open the Break the Barrier submission form](https://docs.google.com/forms/d/e/1FAIpQLSc8nLhq33YpQeZ_pcFWJqFYFV6cJq-v8RLKfJ0zEG0KSWBcQA/viewform?pli=1)**
+
 ## Recommended entry
 
 Submit **LiveForever Care Brief** as a materially evolved version of the existing public prototype. The OpenAI Build Week submission remains preserved at its frozen commit; this branch adds a distinct healthcare workflow focused on patient-to-clinician review.

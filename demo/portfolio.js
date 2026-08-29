@@ -519,7 +519,7 @@
       var label = metric === 'hrv_ms' ? value.toFixed(0) : value.toFixed(1);
       return [
         '<line x1="', left, '" y1="', yy, '" x2="', right, '" y2="', yy, '" stroke="#d6dfdc"/>',
-        '<text x="', left - 9, '" y="', yy + 4, '" text-anchor="end" fill="#627176" font-size="10">', label, '</text>'
+        '<text x="', left - 9, '" y="', yy + 4, '" text-anchor="end" fill="#627176" font-size="11">', label, '</text>'
       ].join('');
     }).join('');
 
@@ -541,7 +541,7 @@
     var dateIndexes = [0, Math.floor((timeline.length - 1) / 2), timeline.length - 1];
     var dates = dateIndexes.map(function (index) {
       return [
-        '<text x="', x(index), '" y="234" text-anchor="middle" fill="#627176" font-size="10">',
+        '<text x="', x(index), '" y="234" text-anchor="middle" fill="#627176" font-size="11">',
         shortDate(timeline[index].date),
         '</text>'
       ].join('');
@@ -554,7 +554,7 @@
       '<path d="', pathParts.join(' '), '" fill="none" stroke="#87959a" stroke-width="2.5"/>',
       dots,
       dates,
-      '<text x="', left, '" y="13" fill="#627176" font-size="10">', meta.axis, '</text>'
+      '<text x="', left, '" y="13" fill="#627176" font-size="11">', meta.axis, '</text>'
     ].join('');
 
     bindChartTooltips(timeline, metric);

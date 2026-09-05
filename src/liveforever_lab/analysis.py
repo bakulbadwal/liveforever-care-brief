@@ -11,6 +11,7 @@ import math
 import random
 import statistics
 from dataclasses import dataclass
+from copy import deepcopy
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Any, Iterable
@@ -37,18 +38,60 @@ class EffectEstimate:
 
 
 def load_csv(path: str | Path) -> list[dict[str, Any]]:
-    """Load a daily CSV, converting numeric cells and preserving ISO dates."""
+    """Load unambiguous daily observations; reject malformed or non-finite data."""
     records: list[dict[str, Any]] = []
-    with Path(path).open(newline="", encoding="utf-8") as handle:
-        for row in csv.DictReader(handle):
+    with Path(path).open(newline="", encoding="utf-8-sig") as handle:
+        reader = csv.DictReader(handle)
+        fields = reader.fieldnames or []
+        if "date" not in fields or any(not field.strip() for field in fields):
+            raise ValueError("CSV requires a date column and non-empty column names.")
+        if len(set(fields)) != len(fields):
+            raise ValueError("CSV contains duplicate column names.")
+        for row in reader:
+            if None in row or any(value is None for value in row.values()):
+                raise ValueError(f"CSV row {reader.line_num} has a different number of cells than its header.")
             converted: dict[str, Any] = {"date": row["date"]}
             for key, value in row.items():
                 if key == "date":
                     continue
                 value = (value or "").strip()
-                converted[key] = float(value) if value else None
+                try:
+                    converted[key] = float(value) if value else None
+                except ValueError as exc:
+                    raise ValueError(f"CSV row {reader.line_num}, field {key}: expected a number or blank.") from exc
             records.append(converted)
-    return sorted(records, key=lambda record: record["date"])
+    return _validated_records(records)
+
+
+def _validated_records(records: Iterable[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Return a date-sorted copy; never silently choose among duplicate days."""
+    checked: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for index, record in enumerate(records, start=1):
+        if not isinstance(record, dict):
+            raise ValueError(f"Record {index} must be a daily observation mapping.")
+        day = record.get("date")
+        try:
+            canonical = date.fromisoformat(day).isoformat()
+        except (ValueError, TypeError) as exc:
+            raise ValueError(f"Record {index}: date must be a valid YYYY-MM-DD calendar date.") from exc
+        if canonical != day:
+            raise ValueError(f"Record {index}: date must use YYYY-MM-DD.")
+        if day in seen:
+            raise ValueError(f"Duplicate date: {day}. Resolve overlapping records before analysis.")
+        seen.add(day)
+        for key, value in record.items():
+            if key == "date" or value is None:
+                continue
+            if not isinstance(value, (int, float)) or not math.isfinite(value):
+                raise ValueError(f"Record {index}, field {key}: expected a finite number or None.")
+        checked.append(dict(record))
+    return sorted(checked, key=lambda record: record["date"])
+
+
+def _validate_lag(lag_days: int) -> None:
+    if isinstance(lag_days, bool) or not isinstance(lag_days, int) or lag_days < 0:
+        raise ValueError("lag_days must be a non-negative integer.")
 
 
 def _mean(values: list[float]) -> float | None:
@@ -133,10 +176,14 @@ def binary_effect(
 ) -> EffectEstimate:
     """Estimate mean(outcome|exposed) - mean(outcome|unexposed).
 
-    The 95% interval uses a deterministic seven-day moving-block bootstrap,
+    The 95% interval uses a deterministic seven-pair moving-block bootstrap,
     with a normal approximation only for very short series. It is an
     uncertainty estimate for this observed comparison, not a causal interval.
     """
+    _validate_lag(lag_days)
+    if isinstance(minimum_per_group, bool) or not isinstance(minimum_per_group, int) or minimum_per_group < 1:
+        raise ValueError("minimum_per_group must be a positive integer.")
+    records = _validated_records(records)
     pairs = _lagged_pairs(records, exposure, outcome, lag_days)
     on = [outcome_value for exposure_value, outcome_value in pairs if exposure_value >= 0.5]
     off = [outcome_value for exposure_value, outcome_value in pairs if exposure_value < 0.5]
@@ -147,6 +194,12 @@ def binary_effect(
                               len(on), len(off), mean_on, mean_off, interpretation)
 
     effect = mean_on - mean_off
+    if min(len(on), len(off)) < 2:
+        return EffectEstimate(
+            outcome, exposure, lag_days, _round(effect), None, None,
+            len(on), len(off), _round(mean_on), _round(mean_off),
+            "Early estimate: interval unavailable with fewer than two observations in a condition.",
+        )
     interval = _block_bootstrap_interval(pairs)
     if interval is None:
         se = math.sqrt(_variance(on) / len(on) + _variance(off) / len(off))
@@ -173,6 +226,8 @@ def pearson_with_interval(
     records: list[dict[str, Any]], x_key: str, y_key: str, *, lag_days: int = 1
 ) -> dict[str, Any]:
     """Pearson r with a Fisher-transformed 95% interval."""
+    _validate_lag(lag_days)
+    records = _validated_records(records)
     by_day = {record["date"]: record for record in records}
     xs: list[float] = []
     ys: list[float] = []
@@ -209,6 +264,10 @@ def trend_summary(
     records: list[dict[str, Any]], metric: str, *, recent_days: int = 7, baseline_days: int = 28
 ) -> dict[str, Any]:
     """Compare the most recent window with the preceding baseline window."""
+    for window in (recent_days, baseline_days):
+        if isinstance(window, bool) or not isinstance(window, int) or window < 1:
+            raise ValueError("Trend windows must be positive integer day counts.")
+    records = _validated_records(records)
     available = [(date.fromisoformat(r["date"]), r.get(metric)) for r in records if r.get(metric) is not None]
     if not available:
         return {"metric": metric, "recent_mean": None, "baseline_mean": None,
@@ -235,8 +294,15 @@ def quality_report(
     records: list[dict[str, Any]], exposure: str, outcome: str, *, lag_days: int = 1
 ) -> dict[str, Any]:
     """Return coverage, balance, paired-sample, and confounding warnings."""
+    _validate_lag(lag_days)
+    records = _validated_records(records)
     if not records:
-        return {"score": 0, "grade": "F", "warnings": ["No records supplied."]}
+        return {
+            "score": 0, "grade": "F", "coverage": 0.0, "calendar_days": 0,
+            "recorded_days": 0, "paired_days": 0, "condition_on_n": 0,
+            "condition_off_n": 0, "balance_ratio": None,
+            "warnings": ["No records supplied.", "This is observational self-tracking data, not a randomized causal estimate."],
+        }
     days = [date.fromisoformat(record["date"]) for record in records]
     calendar_days = (max(days) - min(days)).days + 1
     coverage = len(set(days)) / calendar_days
@@ -289,20 +355,31 @@ def analyze_dataset(
     *,
     genomics_context: dict[str, Any] | None = None,
     longevity_snapshot: dict[str, Any] | None = None,
+    provenance: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build the complete deterministic analysis contract consumed by GPT-5.6."""
+    records = _validated_records(records)
+    provenance = deepcopy(provenance or {})
     exposure = "caffeine_cutoff_2pm"
     hrv = binary_effect(records, exposure, "hrv_ms")
     sleep = binary_effect(records, exposure, "sleep_hours")
     resting_hr = binary_effect(records, exposure, "resting_hr")
     quality = quality_report(records, exposure, "hrv_ms")
+    by_day = {record["date"]: record for record in records}
     return {
         "question": "Does stopping caffeine by 2 PM improve next-day recovery?",
         "analysis_type": "observational within-person comparison",
         "dataset": {
-            "start_date": records[0]["date"], "end_date": records[-1]["date"],
-            "recorded_days": len(records), "persona": "Maya Chen (fictional)",
+            "start_date": records[0]["date"] if records else None,
+            "end_date": records[-1]["date"] if records else None,
+            "recorded_days": quality["recorded_days"],
+            "persona": provenance.get("persona", "Not supplied"),
+            "field_coverage": {
+                field: sum(record.get(field) is not None for record in by_day.values())
+                for field in ("hrv_ms", "sleep_hours", "resting_hr", exposure, "caffeine_mg", "training_load", "alcohol_units")
+            },
         },
+        "provenance": provenance,
         "primary_effect": hrv.as_dict(),
         "secondary_effects": [sleep.as_dict(), resting_hr.as_dict()],
         "dose_response": pearson_with_interval(records, "caffeine_mg", "sleep_hours"),
@@ -313,6 +390,9 @@ def analyze_dataset(
                 "hrv_ms": record.get("hrv_ms"),
                 "sleep_hours": record.get("sleep_hours"),
                 "caffeine_cutoff_2pm": record.get("caffeine_cutoff_2pm"),
+                "prior_day_caffeine_cutoff_2pm": by_day.get(
+                    (date.fromisoformat(record["date"]) - timedelta(days=1)).isoformat(), {}
+                ).get("caffeine_cutoff_2pm"),
             }
             for record in records[-56:]
         ],
@@ -321,7 +401,8 @@ def analyze_dataset(
         "longevity_snapshot": longevity_snapshot or {},
         "calculation_provenance": [
             "Effect = mean(next-day outcome | cutoff followed) - mean(next-day outcome | cutoff not followed).",
-            "95% interval = deterministic seven-day moving-block bootstrap percentile interval.",
+            "95% interval = deterministic moving-block bootstrap over seven consecutive available pairs; gaps are not imputed.",
+            "Fewer than eight pairs use a normal approximation; an interval is unavailable if either condition has fewer than two observations.",
             "Pearson interval uses Fisher's z transformation.",
             "All labels and warnings are derived by src/liveforever_lab/analysis.py.",
         ],

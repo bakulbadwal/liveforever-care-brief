@@ -7,11 +7,11 @@ import json
 from pathlib import Path
 
 from .analysis import analyze_dataset, load_csv
-from .care_brief import build_care_brief
+from .care_brief import build_care_brief, export_care_brief
 from .genomics import caffeine_hypothesis, parse_23andme
 from .phenoage import calculate
 from .planner import build_plan
-from .synthetic import SYNTHETIC_LABS, generate_records, write_csv, write_supporting_fixtures
+from .synthetic import DEMO_PROVENANCE, SYNTHETIC_LABS, generate_records, write_csv, write_supporting_fixtures
 
 
 def build_demo(data_path: Path, output_path: Path) -> dict:
@@ -24,6 +24,7 @@ def build_demo(data_path: Path, output_path: Path) -> dict:
         load_csv(data_path),
         genomics_context=caffeine_hypothesis(parse_23andme(genome_path)),
         longevity_snapshot=calculate(SYNTHETIC_LABS).as_dict(),
+        provenance=DEMO_PROVENANCE,
     )
     plan = build_plan(analysis)
     payload = {
@@ -31,6 +32,7 @@ def build_demo(data_path: Path, output_path: Path) -> dict:
         "plan": plan,
         "care_brief": build_care_brief(analysis, plan),
     }
+    payload["exports"] = {"care_brief_markdown": export_care_brief(payload["care_brief"], "markdown")}
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
     return payload

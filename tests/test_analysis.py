@@ -20,6 +20,8 @@ class AnalysisTests(unittest.TestCase):
         self.assertGreater(effect["ci_low"], 0.0)
         self.assertGreaterEqual(effect["n_on"], 30)
         self.assertGreaterEqual(effect["n_off"], 30)
+        self.assertEqual((effect["effect"], effect["ci_low"], effect["ci_high"], effect["n_on"], effect["n_off"]), (3.94, 1.13, 6.42, 36, 37))
+        self.assertEqual([(item["effect"], item["ci_low"], item["ci_high"]) for item in analysis["secondary_effects"]], [(0.3, 0.05, 0.56), (-1.38, -2.26, -0.45)])
 
     def test_lag_pairs_exposure_with_next_day(self) -> None:
         start = date(2026, 1, 1)
@@ -58,7 +60,40 @@ class AnalysisTests(unittest.TestCase):
         self.assertLess(result["ci_low"], result["r"])
         self.assertLess(result["r"], result["ci_high"])
 
+    def test_singleton_condition_does_not_report_false_precision(self) -> None:
+        records = [
+            {"date": "2026-01-01", "cutoff": 1, "outcome": 0},
+            {"date": "2026-01-02", "cutoff": 0, "outcome": 10},
+            {"date": "2026-01-03", "cutoff": 0, "outcome": 1},
+        ]
+        effect = binary_effect(records, "cutoff", "outcome")
+        self.assertEqual(effect.effect, 9)
+        self.assertIsNone(effect.ci_low)
+        self.assertIsNone(effect.ci_high)
+        self.assertIn("interval unavailable", effect.interpretation)
+
+    def test_timeline_uses_actual_previous_calendar_day(self) -> None:
+        records = [
+            {"date": "2026-01-01", "caffeine_cutoff_2pm": 1, "hrv_ms": 40},
+            {"date": "2026-01-02", "caffeine_cutoff_2pm": 0, "hrv_ms": 50},
+            {"date": "2026-01-04", "caffeine_cutoff_2pm": 1, "hrv_ms": 45},
+        ]
+        timeline = analyze_dataset(records)["timeline"]
+        self.assertIsNone(timeline[0]["prior_day_caffeine_cutoff_2pm"])
+        self.assertEqual(timeline[1]["prior_day_caffeine_cutoff_2pm"], 1)
+        self.assertIsNone(timeline[2]["prior_day_caffeine_cutoff_2pm"])
+
+    def test_field_coverage_counts_actual_outcomes(self) -> None:
+        analysis = analyze_dataset(generate_records())
+        self.assertEqual(analysis["dataset"]["field_coverage"]["hrv_ms"], 78)
+        self.assertEqual(analysis["dataset"]["field_coverage"]["caffeine_cutoff_2pm"], 80)
+
+    def test_empty_quality_contract_is_complete(self) -> None:
+        quality = quality_report([], "cutoff", "outcome")
+        self.assertEqual(quality["paired_days"], 0)
+        self.assertEqual(quality["coverage"], 0)
+        self.assertEqual(quality["grade"], "F")
+
 
 if __name__ == "__main__":
     unittest.main()
-

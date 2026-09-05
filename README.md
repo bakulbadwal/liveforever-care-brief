@@ -2,7 +2,7 @@
 
 ### Personal evidence, ready for review.
 
-> **Break the Barrier 2026** · A privacy-first AI workflow that turns fragmented longitudinal health data into a source-linked personal evidence brief for clinician review.
+> **Pending Break the Barrier 2026 entry** · A local evidence workflow that turns longitudinal health records into a source-linked draft for clinician review.
 
 [![LiveForever Care Brief in a clinician-review setting](docs/liveforever-care-brief-hero.png)](https://bakulbadwal.github.io/liveforever-care-brief/#care)
 
@@ -10,7 +10,7 @@
 
 **[Try the Care Brief](https://bakulbadwal.github.io/liveforever-care-brief/#care)** · [Product case study](CASE_STUDY.md) · [Technical method](docs/TECHNICAL_METHOD.md) · [Extension provenance](docs/BREAK_THE_BARRIER_PROVENANCE.md)
 
-[![Tests](https://img.shields.io/badge/tests-17%20passing-147D69)](#run-it)
+[![Tests](https://img.shields.io/badge/tests-41%20passing-147D69)](#run-it)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-192628)](pyproject.toml)
 [![Data](https://img.shields.io/badge/data-100%25%20synthetic-6A5D91)](#privacy-and-safety)
 [![License](https://img.shields.io/badge/license-MIT-E9B949)](LICENSE)
@@ -22,7 +22,7 @@
 | **User:** A serious self-tracker preparing for a clinical conversation | **Evidence engine:** Deterministic Python |
 | **Barrier:** Years of personal health context rarely fit into a short visit | **AI boundary:** Explain fixed evidence; never change calculations, diagnose, or prescribe |
 | **Output:** A concise, source-linked draft the user reviews before sharing | **Public demo:** Static GitHub Pages site; no login, API key, backend, or PHI |
-| **Stage:** Working healthcare workflow prototype | **Quality:** 17 automated tests plus desktop and mobile browser verification |
+| **Stage:** Working prototype; pending hackathon entry | **Quality:** 41 Python tests, optional browser-code checks, and desktop/mobile UI verification |
 
 LiveForever combines longitudinal wearable signals, habit logs, laboratory trends, and cautious genomic context to answer one practical question at a time, then prepares the result for a more useful clinical conversation:
 
@@ -32,14 +32,15 @@ The hosted demo needs no login, API key, external health service, or live model 
 
 ## Try It In 30 Seconds
 
-1. Start in **Care brief** to inspect the source-linked handoff, uncertainty, clinician questions, and user-controlled print path.
+1. Start in **Care brief** to inspect evidence readiness, per-source coverage, quality warnings, uncertainty, and clinician questions.
 2. Open **Snapshot** to compare the primary result, supporting metrics, and nightly recovery timeline.
 3. Toggle the chart between **HRV** and **Sleep**, then hover or tab through individual observations.
 4. Open **Experiment** for the balanced 14-day schedule, then use **Data & methods** to inspect context and calculation provenance.
+5. Choose **Download Markdown**, **Download JSON**, or **Print brief**. Both downloads keep the complete evidence contract, source links, warnings, and plan boundaries; nothing is uploaded.
 
 The demo examines whether stopping caffeine by 2 PM is associated with better next-day recovery across 73 paired nights. It reports a `+3.94 ms` HRV difference with a 95% interval of `+1.13 to +6.42` and keeps the result explicitly labeled as an **association only**.
 
-![Source-linked LiveForever Care Brief](docs/liveforever-care-brief-v2.png)
+![Care Brief with evidence readiness and local export controls](docs/liveforever-care-brief-2026-09-05.png)
 
 ## What Makes It Different
 
@@ -62,10 +63,14 @@ The extension adds:
 - Explicit uncertainty and missing-evidence sections that travel with the result.
 - Questions that help a clinician review relevance, alternative explanations, and next measurements.
 - A model contract that locks calculations and forbids diagnosis, prescribing, invented evidence, or causal upgrades.
-- A responsive Care Brief view with a user-controlled print path; the demo transmits nothing and contains no PHI.
-- Six new care-brief tests, bringing the focused suite to 17 tests.
+- A responsive Care Brief view with local Markdown/JSON export, printing, source links, and visible quality warnings; the demo transmits no health record and contains no PHI.
+- Evidence readiness derived from sample sufficiency, available intervals, source links, and the existing quality grade. This is a workflow check, not a validated clinical score.
+- Explicit unavailable, early, inconclusive, higher, and lower comparison states. Missing context stays missing; unknown provenance never becomes a claim that data is synthetic or free of PHI.
+- A focused 41-test Python suite plus optional dependency-free JavaScript checks for exports and display boundaries. Invalid dates, duplicate days, ambiguous CSV headers, and non-finite values are rejected before calculation.
 
 This is a workflow prototype, not an EHR integration or clinical device. The intended value is better visit preparation and more efficient review, while preserving professional judgment and the user's control over sharing.
+
+The September 5 iteration strengthens this **pending entry** after the original Build Week submission. It does not change the historical judged artifact or the demo's three effect estimates. See the [dated engineering changelog](docs/ASTRA_CHANGELOG_2026-09-05.md) for exact behavior changes, validation, and limitations.
 
 ## Impact Hypothesis
 
@@ -150,11 +155,27 @@ python3.11 -m http.server 8765 --directory demo
 
 Open `http://localhost:8765/#care`, or use the [hosted demo](https://bakulbadwal.github.io/liveforever-care-brief/#care).
 
+The CLI regenerates only the fictional fixtures and `demo/analysis.json`. Markdown export is prepared by Python in that payload; the browser saves it as `.md` or serializes the same Care Brief contract as `.json`. Markdown includes a readable summary and a complete JSON appendix so secondary outcomes, sample counts, plan stop conditions, and AI boundaries survive the handoff.
+
 Run the tests:
 
 ```bash
 PYTHONPATH=src python3.11 -m unittest discover -s tests -v
 ```
+
+Optional browser-code regression checks use an already-installed Node runtime and no packages:
+
+```bash
+node tests/test_demo_ui.cjs
+```
+
+To inspect failure cases without replacing the main demonstration:
+
+```bash
+PYTHONPATH=src python3.11 tests/preview_scenarios.py --port 8772
+```
+
+Open `http://127.0.0.1:8772/empty/#care`, `/negative/#care`, `/small/#care`, or `/missing-condition/#care`. All scenarios are generated in memory from synthetic records. Their source links point to the exact local scenario CSV.
 
 To test the agent workflow, install this repository as a Codex Skill and invoke:
 
@@ -167,7 +188,7 @@ $liveforever-evidence-lab Investigate whether my caffeine timing is associated w
 - [`src/liveforever_lab/`](src/liveforever_lab/) · Deterministic analysis, care-brief contract, genomics, PhenoAge, synthetic data, and planning.
 - [`SKILL.md`](SKILL.md) · Bounded AI workflow, responsibilities, forbidden behavior, and care-brief format.
 - [`demo/`](demo/) · Static interactive application, generated analysis contract, and preserved Build Week interface.
-- [`tests/`](tests/) · Seventeen focused tests for analysis, context, and care-brief behavior.
+- [`tests/`](tests/) · Analysis, context, care-brief/export regressions, and a local synthetic UI scenario preview.
 - [`docs/`](docs/) · Technical method, provenance, submission copy, demo script, and checklist.
 - [`docs/README.md`](docs/README.md) · Documentation index for judges and future work.
 

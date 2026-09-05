@@ -9,17 +9,18 @@ from typing import Any
 
 def build_plan(analysis: dict[str, Any], *, seed: int = 56) -> dict[str, Any]:
     """Build a balanced 14-day replication plan without prescribing treatment."""
-    start = date.fromisoformat(analysis["dataset"]["end_date"]) + timedelta(days=1)
+    end_date = analysis["dataset"]["end_date"]
+    start = date.fromisoformat(end_date) + timedelta(days=1) if end_date else None
     conditions = ["Cutoff by 2 PM"] * 7 + ["Usual timing"] * 7
     random.Random(seed).shuffle(conditions)
     schedule = [
         {"date": (start + timedelta(days=index)).isoformat(), "condition": condition}
-        for index, condition in enumerate(conditions)
+        for index, condition in enumerate(conditions) if start is not None
     ]
     primary = analysis["primary_effect"]
     return {
         "title": "14-day caffeine timing replication",
-        "status": "Ready to review",
+        "status": "Ready to review" if start else "No schedule: observation dates were not supplied",
         "hypothesis": analysis["question"],
         "design": "Balanced randomized daily conditions with next-day outcome measurement.",
         "primary_outcome": "Next-day nightly HRV (ms)",
@@ -42,4 +43,3 @@ def build_plan(analysis: dict[str, Any], *, seed: int = 56) -> dict[str, Any]:
         ],
         "model_instruction": "GPT-5.6 may explain this plan and ask clarifying questions, but it must not change calculated values or convert association into medical advice.",
     }
-

@@ -26,11 +26,28 @@
 
   function fmt(value, digits) {
     var precision = digits == null ? 2 : digits;
-    return Number(value).toFixed(precision);
+    return typeof value === 'number' && Number.isFinite(value) ? value.toFixed(precision) : '—';
   }
 
   function signed(value, digits) {
-    return (value >= 0 ? '+' : '') + fmt(value, digits);
+    return typeof value === 'number' && Number.isFinite(value) ? (value >= 0 ? '+' : '') + fmt(value, digits) : '—';
+  }
+
+  function escapeText(value) {
+    return String(value).replace(/[&<>"']/g, function (character) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[character];
+    });
+  }
+
+  function displayCopy(value) {
+    if (typeof value === 'string') return escapeText(value);
+    if (Array.isArray(value)) return value.map(displayCopy);
+    if (value && typeof value === 'object') {
+      return Object.fromEntries(Object.entries(value).map(function (entry) {
+        return [entry[0], displayCopy(entry[1])];
+      }));
+    }
+    return value;
   }
 
   function shortDate(value) {
@@ -59,17 +76,20 @@
 
   function render(payload) {
     state.payload = payload;
-
+    payload = displayCopy(payload);
     var a = payload.analysis;
     var p = payload.plan;
     var brief = payload.care_brief;
     var primary = a.primary_effect;
+    var readiness = brief.readiness;
+    var labs = a.longevity_snapshot || {};
+    var genome = a.genomics_context || {};
     var sleep = a.secondary_effects.find(function (item) {
       return item.outcome === 'sleep_hours';
-    });
+    }) || {};
     var rhr = a.secondary_effects.find(function (item) {
       return item.outcome === 'resting_hr';
-    });
+    }) || {};
 
     var schedule = p.schedule.map(function (day) {
       var conditionClass = day.condition.indexOf('Cutoff') === 0 ? 'cutoff' : 'usual';
@@ -103,10 +123,17 @@
     }).join('');
 
     var careSources = brief.source_ledger.map(function (source) {
+      var coverage = Object.entries(source.coverage || {}).map(function (entry) {
+        var names = { hrv_ms: 'HRV', sleep_hours: 'sleep', resting_hr: 'resting HR', caffeine_cutoff_2pm: 'timing', caffeine_mg: 'dose', training_load: 'training', alcohol_units: 'alcohol' };
+        return (names[entry[0]] || entry[0]) + ': ' + entry[1];
+      }).join(' · ');
       return [
         '<div class="care-source">',
         '<div><span>', source.label, '</span><strong>', source.status, '</strong></div>',
-        '<p>', source.provenance, '</p>',
+        '<div><p>', source.provenance, '</p><p class="source-role">', source.role, '</p>',
+        coverage ? '<p class="source-coverage">Recorded values — ' + coverage + '</p>' : '',
+        source.url && /^https?:\/\//.test(source.url) ? '<a href="' + source.url + '" target="_blank" rel="noreferrer">Inspect source<span class="sr-only">: ' + source.label + '</span> ↗</a>' : '<span class="source-unlinked">No source link supplied</span>',
+        '</div>',
         '</div>'
       ].join('');
     }).join('');
@@ -137,7 +164,7 @@
           '<div class="primary-result">',
             '<div class="label">Observed HRV difference</div>',
             '<div class="result-value">', signed(primary.effect), ' ms</div>',
-            '<p class="result-copy">Higher next-day HRV when caffeine stopped by 2 PM.</p>',
+            '<p class="result-copy">', brief.signal_headline, '.</p>',
             '<div class="result-meta">',
               '<span class="claim-pill">Association only</span>',
               '<span>95% interval ', signed(primary.ci_low), ' to ', signed(primary.ci_high), '</span>',
@@ -152,7 +179,7 @@
             '<div class="support-metric">',
               '<div class="label">Resting HR</div>',
               '<strong>', signed(rhr.effect), ' bpm</strong>',
-              '<p>Lower values followed cutoff days in this dataset.</p>',
+              '<p>Difference between cutoff and usual-timing nights.</p>',
             '</div>',
             '<div class="support-metric">',
               '<div class="label">Paired nights</div>',
@@ -206,13 +233,14 @@
             '<div class="legend">',
               '<span><i style="background:var(--green)"></i>Cutoff by 2 PM</span>',
               '<span><i style="background:var(--coral)"></i>Usual timing</span>',
-              '<span><i style="background:#87959a"></i>7-day mean</span>',
+              '<span><i style="background:#87959a"></i>Timing unavailable</span>',
+              '<span><i class="line-key"></i>7-calendar-day mean</span>',
             '</div>',
           '</section>',
 
           '<aside class="reading-panel">',
             '<h2>What this means</h2>',
-            '<p>Cutoff days were associated with higher HRV and longer sleep. The next useful step is to repeat the comparison under a balanced schedule.</p>',
+            '<p>', brief.plain_language_signal, '</p>',
             '<div class="reading-facts">',
               '<div class="reading-fact"><span>Coverage</span><strong>', Math.round(a.quality.coverage * 100), '% of calendar days</strong></div>',
               '<div class="reading-fact"><span>Balance</span><strong>', a.quality.condition_on_n, ' vs ', a.quality.condition_off_n, ' nights</strong></div>',
@@ -230,12 +258,15 @@
         '<div class="care-titlebar">',
           '<div class="page-intro">',
             '<p class="kicker">Care brief &middot; draft for review</p>',
-            '<h1>Bring the signal, not the spreadsheet.</h1>',
+            '<h1>Personal evidence, ready for review.</h1>',
             '<p>A concise, source-linked summary a person can review before deciding whether to share it with a clinician.</p>',
           '</div>',
           '<div class="care-actions">',
-            '<span>Nothing is transmitted</span>',
-            '<button class="button primary" type="button" data-print-brief="true">Print brief</button>',
+            '<div class="export-buttons"><button class="button primary" type="button" data-export="markdown">Download Markdown</button>',
+            '<button class="button" type="button" data-export="json">Download JSON</button>',
+            '<button class="button" type="button" data-print-brief="true">Print brief</button></div>',
+            '<span>Save locally. Sources and warnings stay attached.</span>',
+            '<span id="export-status" role="status" aria-live="polite"></span>',
           '</div>',
         '</div>',
 
@@ -249,14 +280,24 @@
             '<dl>',
               '<div><dt>Person</dt><dd>', brief.persona, '</dd></div>',
               '<div><dt>Record</dt><dd>', brief.privacy.record_type, '</dd></div>',
-              '<div><dt>Status</dt><dd>Draft for review</dd></div>',
+              '<div><dt>Window</dt><dd>', a.dataset.start_date || 'Not supplied', ' — ', a.dataset.end_date || 'Not supplied', '</dd></div>',
             '</dl>',
           '</header>',
 
-          '<section class="care-signal" aria-labelledby="care-signal-heading">',
+          '<section class="care-readiness" aria-labelledby="readiness-heading">',
+            '<div class="readiness-heading"><span class="status-dot ', readiness.status, '" aria-hidden="true"></span><div><span class="document-label">Evidence readiness</span><h3 id="readiness-heading">', readiness.label, '</h3></div></div>',
+            '<dl class="readiness-facts">',
+              '<div><dt>Paired nights</dt><dd>', primary.n_on + primary.n_off, '<small>', primary.n_on, ' cutoff / ', primary.n_off, ' usual</small></dd></div>',
+              '<div><dt>Sources supplied</dt><dd>', readiness.sources_supplied, ' / ', readiness.sources_total, '<small>', readiness.core_sources_linked ? 'Comparison sources linked' : 'Comparison source links missing', '</small></dd></div>',
+              '<div><dt>Quality warnings</dt><dd>', readiness.warning_count, '<small>Grade ', a.quality.grade, ' · ', a.quality.score, '/100</small></dd></div>',
+            '</dl>',
+            '<p class="readiness-boundary">', readiness.boundary, '</p>',
+          '</section>',
+
+          '<section class="care-signal ', readiness.signal === 'higher' && readiness.status === 'reviewable' ? '' : 'signal-neutral', '" aria-labelledby="care-signal-heading">',
             '<div>',
               '<span class="document-label">Observed signal</span>',
-              '<h3 id="care-signal-heading">', signed(primary.effect), ' ms higher nightly HRV</h3>',
+              '<h3 id="care-signal-heading">', brief.signal_headline, '</h3>',
               '<p>', brief.plain_language_signal, '</p>',
             '</div>',
             '<div class="care-lock">',
@@ -267,19 +308,28 @@
 
           '<div class="care-columns">',
             '<section class="care-block" aria-labelledby="care-source-heading">',
-              '<div class="care-block-head"><span>01</span><div><h3 id="care-source-heading">Evidence reviewed</h3><p>Every source stays attached to its role.</p></div></div>',
+              '<div class="care-block-head"><span>01</span><div><h3 id="care-source-heading">Sources supplied</h3><p>Inspect the record, coverage, and role of each source.</p></div></div>',
               '<div class="care-source-list">', careSources, '</div>',
             '</section>',
 
             '<section class="care-block" aria-labelledby="care-uncertainty-heading">',
               '<div class="care-block-head"><span>02</span><div><h3 id="care-uncertainty-heading">What remains uncertain</h3><p>Limitations travel with the summary.</p></div></div>',
               '<ul class="care-list">', uncertainty, '</ul>',
+              '<div class="brief-warnings"><h4>Quality warnings</h4>', warnings, '</div>',
               '<details class="missing-details">',
                 '<summary>Missing evidence to consider</summary>',
                 '<ul>', missingEvidence, '</ul>',
               '</details>',
             '</section>',
           '</div>',
+
+          '<section class="care-block care-supporting" aria-labelledby="supporting-heading">',
+            '<h3 id="supporting-heading">Supporting outcomes</h3><p>Cutoff minus usual timing; each outcome has its own paired sample.</p>',
+            '<div class="evidence-table-wrap"><table class="evidence-table"><thead><tr><th scope="col">Outcome</th><th scope="col">Difference</th><th scope="col">95% interval</th><th scope="col">Cutoff / usual</th></tr></thead><tbody>',
+              '<tr><th scope="row">Sleep duration</th><td>', signed(sleep.effect), ' h</td><td>', signed(sleep.ci_low), ' to ', signed(sleep.ci_high), '</td><td>', sleep.n_on == null ? '—' : sleep.n_on, ' / ', sleep.n_off == null ? '—' : sleep.n_off, '</td></tr>',
+              '<tr><th scope="row">Resting HR</th><td>', signed(rhr.effect), ' bpm</td><td>', signed(rhr.ci_low), ' to ', signed(rhr.ci_high), '</td><td>', rhr.n_on == null ? '—' : rhr.n_on, ' / ', rhr.n_off == null ? '—' : rhr.n_off, '</td></tr>',
+            '</tbody></table></div>',
+          '</section>',
 
           '<section class="care-questions" aria-labelledby="care-questions-heading">',
             '<div class="care-block-head"><span>03</span><div><h3 id="care-questions-heading">Questions for a clinician</h3><p>The AI prepares the agenda; the clinician supplies medical judgment.</p></div></div>',
@@ -317,7 +367,7 @@
                 '<span><i style="background:var(--coral)"></i>Usual</span>',
               '</div>',
             '</div>',
-            '<div class="schedule">', schedule, '</div>',
+            schedule ? '<div class="schedule">' + schedule + '</div>' : '<p class="panel-lede">No dated schedule is available because no observation window was supplied.</p>',
           '</section>',
           '<aside class="controls-panel">',
             '<h2>Predefined controls</h2>',
@@ -348,12 +398,12 @@
         '<div class="data-layout">',
           '<section class="quality-panel">',
             '<h2>Connected data</h2>',
-            '<p class="panel-lede">Four evidence layers support the question; none determines the answer alone.</p>',
+            '<p class="panel-lede">', readiness.sources_supplied, ' of ', readiness.sources_total, ' source layers supplied. Laboratory and genomic context are excluded from the observed effect.</p>',
             '<div class="source-list">',
               sourceRow('Wearables', a.dataset.recorded_days + ' daily records', 'HRV, sleep duration, resting heart rate, and missingness.'),
               sourceRow('Habit log', a.quality.paired_days + ' paired nights', 'Caffeine timing, total dose, training load, meditation, and alcohol.'),
-              sourceRow('Laboratory', a.longevity_snapshot.completeness, 'Synthetic inputs for the published PhenoAge calculation.'),
-              sourceRow('Genomics', '1 synthetic marker', 'Caffeine-metabolism context used to prioritize the question.'),
+              sourceRow('Laboratory', labs.completeness || 'Not supplied', 'Context for the published PhenoAge calculation.'),
+              sourceRow('Genomics', genome.confidence || 'Not supplied', 'Caffeine-metabolism context used to prioritize the question.'),
             '</div>',
             '<div class="warning-list">', warnings, '</div>',
           '</section>',
@@ -362,12 +412,12 @@
             '<h2>Personal context</h2>',
             '<p class="panel-lede">Context helps choose what to test. The observed data still owns the result.</p>',
             '<div class="context-item">',
-              '<div class="context-value">', a.genomics_context.gene, '<br>', a.genomics_context.synthetic_genotype, '</div>',
-              '<div class="context-copy"><strong>Caffeine metabolism context</strong><p>', a.genomics_context.annotation, ' One synthetic marker is used to prioritize the question, not determine the result.</p></div>',
+              '<div class="context-value">', genome.gene || '—', '<br>', genome.synthetic_genotype || '—', '</div>',
+              '<div class="context-copy"><strong>Caffeine metabolism context</strong><p>', genome.annotation || 'No genomic context was supplied for this run.', '</p></div>',
             '</div>',
             '<div class="context-item">',
-              '<div class="context-value">', fmt(a.longevity_snapshot.phenoage, 1), '<br>yrs</div>',
-              '<div class="context-copy"><strong>PhenoAge snapshot</strong><p>Chronological age ', fmt(a.longevity_snapshot.chronological_age, 0), '; difference ', signed(a.longevity_snapshot.difference_years, 1), ' years. Calculated from ', a.longevity_snapshot.completeness.toLowerCase(), '.</p></div>',
+              '<div class="context-value">', fmt(labs.phenoage, 1), '<br>yrs</div>',
+              '<div class="context-copy"><strong>PhenoAge snapshot</strong><p>', labs.completeness ? 'Chronological age ' + fmt(labs.chronological_age, 0) + '; difference ' + signed(labs.difference_years, 1) + ' years. Calculated from ' + labs.completeness.toLowerCase() + '.' : 'No laboratory snapshot was supplied for this run.', '</p></div>',
             '</div>',
           '</aside>',
 
@@ -432,6 +482,30 @@
         window.print();
       });
     });
+
+    document.querySelectorAll('[data-export]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        var format = button.dataset.export;
+        var brief = state.payload.care_brief;
+        var status = document.getElementById('export-status');
+        var text = format === 'json' ? JSON.stringify(brief, null, 2) + '\n' : (state.payload.exports || {}).care_brief_markdown;
+        if (!text) {
+          status.textContent = 'This format is unavailable. Rebuild the demo with the current evidence engine.';
+          return;
+        }
+        var extension = format === 'json' ? 'json' : 'md';
+        var name = 'liveforever-care-brief-' + (brief.evidence_summary.data_window.end_date || 'undated') + '.' + extension;
+        var url = URL.createObjectURL(new Blob([text], { type: format === 'json' ? 'application/json;charset=utf-8' : 'text/markdown;charset=utf-8' }));
+        var link = document.createElement('a');
+        link.href = url;
+        link.download = name;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        window.setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+        status.textContent = 'Download requested: ' + name + '. Includes all evidence, sources, and warnings.';
+      });
+    });
   }
 
   function navigate(view) {
@@ -457,15 +531,20 @@
     });
 
     if (focusHeading) {
+      var heading = document.querySelector('[data-view-panel="' + view + '"] h1');
+      if (heading) {
+        heading.setAttribute('tabindex', '-1');
+        heading.focus({ preventScroll: true });
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }
 
-  function movingAverage(values, index, width) {
-    var lookback = width == null ? 7 : width;
-    var slice = values
-      .slice(Math.max(0, index - lookback + 1), index + 1)
-      .filter(function (value) { return value != null; });
+  function movingAverage(timeline, metric, index) {
+    var end = Date.parse(timeline[index].date);
+    var slice = timeline.slice(0, index + 1).filter(function (point) {
+      return Date.parse(point.date) >= end - 6 * 86400000 && typeof point[metric] === 'number' && Number.isFinite(point[metric]);
+    }).map(function (point) { return point[metric]; });
 
     if (!slice.length) {
       return null;
@@ -484,22 +563,29 @@
 
     var meta = metricMeta[metric];
     var values = timeline.map(function (point) { return point[metric]; });
-    var valid = values.filter(function (value) { return value != null; });
+    var valid = values.filter(function (value) { return typeof value === 'number' && Number.isFinite(value); });
+    document.getElementById('chart-tooltip').hidden = true;
+    if (!valid.length) {
+      svg.innerHTML = '<title id="chart-title">Recovery timeline unavailable</title><desc id="chart-description">No recorded values for this metric.</desc><text x="380" y="125" text-anchor="middle" fill="#627176" font-size="14">No recorded values for this metric</text>';
+      return;
+    }
     var min = Math.min.apply(null, valid) - meta.padding;
     var max = Math.max.apply(null, valid) + meta.padding;
     var left = 48;
     var right = 742;
     var top = 22;
     var bottom = 208;
+    var firstDate = Date.parse(timeline[0].date);
+    var timeSpan = Date.parse(timeline[timeline.length - 1].date) - firstDate;
     var x = function (index) {
-      return left + (right - left) * index / Math.max(1, timeline.length - 1);
+      return left + (right - left) * (Date.parse(timeline[index].date) - firstDate) / Math.max(1, timeSpan);
     };
     var y = function (value) {
       return bottom - (value - min) / (max - min) * (bottom - top);
     };
 
     var averages = values.map(function (_, index) {
-      return movingAverage(values, index, 7);
+      return movingAverage(timeline, metric, index);
     });
 
     var pathParts = [];
@@ -524,21 +610,22 @@
     }).join('');
 
     var dots = timeline.map(function (point, index) {
-      if (point[metric] == null) {
+      if (typeof point[metric] !== 'number' || !Number.isFinite(point[metric])) {
         return '';
       }
-      var cutoff = point.caffeine_cutoff_2pm >= 0.5;
+      var timing = point.prior_day_caffeine_cutoff_2pm;
+      var condition = timing == null ? 'Prior-day timing unavailable' : timing >= 0.5 ? 'Prior-day cutoff by 2 PM' : 'Prior-day usual timing';
       return [
         '<circle class="chart-point" tabindex="0" data-index="', index, '" ',
         'cx="', x(index), '" cy="', y(point[metric]), '" r="4.5" ',
-        'fill="', cutoff ? '#14745f' : '#c45b49', '" ',
+        'fill="', timing == null ? '#87959a' : timing >= 0.5 ? '#14745f' : '#c45b49', '" ',
         'stroke="#ffffff" stroke-width="1.5">',
-        '<title>', shortDate(point.date), ': ', fmt(point[metric], meta.digits), ' ', meta.unit, '</title>',
+        '<title>', shortDate(point.date), ': ', fmt(point[metric], meta.digits), ' ', meta.unit, '. ', condition, '</title>',
         '</circle>'
       ].join('');
     }).join('');
 
-    var dateIndexes = [0, Math.floor((timeline.length - 1) / 2), timeline.length - 1];
+    var dateIndexes = Array.from(new Set([0, Math.floor((timeline.length - 1) / 2), timeline.length - 1]));
     var dates = dateIndexes.map(function (index) {
       return [
         '<text x="', x(index), '" y="234" text-anchor="middle" fill="#627176" font-size="10">',
@@ -570,7 +657,8 @@
       var point = timeline[Number(circle.dataset.index)];
       var circleRect = circle.getBoundingClientRect();
       var wrapperRect = wrapper.getBoundingClientRect();
-      var condition = point.caffeine_cutoff_2pm >= 0.5 ? 'Cutoff by 2 PM' : 'Usual timing';
+      var timing = point.prior_day_caffeine_cutoff_2pm;
+      var condition = timing == null ? 'Prior-day timing unavailable' : timing >= 0.5 ? 'Prior-day cutoff by 2 PM' : 'Prior-day usual timing';
 
       tooltip.innerHTML = [
         '<strong>', shortDate(point.date), '</strong><br>',
@@ -611,6 +699,15 @@
     }
   });
 
+  var printDetails = [];
+  window.addEventListener('beforeprint', function () {
+    printDetails = Array.from(document.querySelectorAll('#care-sheet details:not([open])'));
+    printDetails.forEach(function (detail) { detail.open = true; });
+  });
+  window.addEventListener('afterprint', function () {
+    printDetails.forEach(function (detail) { detail.open = false; });
+  });
+
   fetch('analysis.json')
     .then(function (response) {
       if (!response.ok) {
@@ -623,7 +720,7 @@
       document.getElementById('app').innerHTML = [
         '<div class="error-state">',
         '<strong>Demo data could not load.</strong>',
-        error.message,
+        escapeText(error.message),
         '<br><br>Serve the demo folder over HTTP rather than opening the file directly.',
         '</div>'
       ].join('');

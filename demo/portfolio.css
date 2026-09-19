@@ -184,7 +184,7 @@ summary:focus-visible {
 .brand strong {
   display: block;
   font-family: var(--display);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.02em;
   line-height: 1;
@@ -256,7 +256,7 @@ summary:focus-visible {
   padding: 14px 14px 15px;
   color: var(--tab-muted);
   border: 1px solid var(--spine-2);
-  font-size: 12.5px;
+  font-size: 13px;
   line-height: 1.5;
 }
 
@@ -395,7 +395,7 @@ summary:focus-visible {
   color: var(--signal);
   background: var(--signal-soft);
   font-family: var(--mono);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0;
   line-height: 1.3;
@@ -559,7 +559,7 @@ h1 {
 
 .label {
   color: var(--ink-2);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
 }
@@ -601,7 +601,7 @@ h1 {
   color: var(--caution);
   background: var(--paper);
   border: 1.5px solid var(--caution);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.1em;
 }
@@ -707,7 +707,7 @@ h1 {
 
 .step-value {
   display: block;
-  font-size: 21px;
+  font-size: 20px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
@@ -762,7 +762,7 @@ h1 {
   background: var(--paper);
   border: 0;
   border-right: 1.5px solid var(--ink);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   transition: background-color 160ms var(--ease-out), color 160ms var(--ease-out);
 }
@@ -832,7 +832,7 @@ h1 {
   gap: 8px 22px;
   color: var(--ink-2);
   border-top: 1px solid var(--hair);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.06em;
 }
@@ -943,7 +943,7 @@ h1 {
 
 /* On the brief the page title is a label; the document below carries the content. */
 #view-care h1 {
-  font-size: 34px;
+  font-size: 30px;
 }
 
 #view-care .page-intro > p:last-child {
@@ -1119,7 +1119,7 @@ h1 {
 .readiness-facts dd {
   margin: 6px 0 0;
   font-family: var(--display);
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -1200,7 +1200,7 @@ h1 {
   min-height: 52px;
   color: var(--paper);
   background: var(--signal);
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
 }
 
@@ -1209,7 +1209,7 @@ h1 {
   align-items: center;
   padding: 0 18px;
   font-family: var(--display);
-  font-size: 19px;
+  font-size: 20px;
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1219,7 +1219,7 @@ h1 {
   margin: 0;
   padding: 16px 20px 18px;
   color: var(--ink);
-  font-size: 15.5px;
+  font-size: 16px;
   line-height: 1.5;
 }
 
@@ -1292,7 +1292,7 @@ h1 {
   align-items: baseline;
   gap: 8px;
   color: var(--ink);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
   white-space: nowrap;
@@ -1307,7 +1307,7 @@ h1 {
 }
 
 .care-source > div:first-child > strong {
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -1374,7 +1374,7 @@ h1 {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
 }
@@ -1408,7 +1408,7 @@ h1 {
   color: var(--paper);
   background: var(--caution);
   font-family: var(--display);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
   line-height: 1;
 }
@@ -1427,7 +1427,7 @@ h1 {
 .pause-details summary {
   padding: 14px 0 10px;
   color: var(--ink);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
   list-style: none;
@@ -1521,7 +1521,7 @@ h1 {
   padding-top: 2px;
   color: var(--ink);
   font-family: var(--display);
-  font-size: 22px;
+  font-size: 24px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -1671,7 +1671,7 @@ h1 {
   background: var(--paper);
   border: 1px solid var(--ink);
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.3;
 }
 
@@ -1720,7 +1720,7 @@ h1 {
   flex-wrap: wrap;
   gap: 16px;
   color: var(--ink-2);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.08em;
 }
@@ -1750,7 +1750,7 @@ h1 {
   background: var(--paper);
   border-right: 1px solid var(--hair);
   border-bottom: 1px solid var(--hair);
-  font-size: 12.5px;
+  font-size: 13px;
 }
 
 .day:nth-child(7n) {
@@ -1836,7 +1836,7 @@ h1 {
 .decision strong {
   display: block;
   margin-bottom: 8px;
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
 }
@@ -1948,7 +1948,7 @@ h1 {
   align-items: baseline;
   gap: 8px;
   color: var(--ink);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.1em;
   white-space: nowrap;
@@ -1963,7 +1963,7 @@ h1 {
 }
 
 .source-row strong {
-  font-size: 15.5px;
+  font-size: 16px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -2082,7 +2082,7 @@ h1 {
 .privacy-band strong {
   display: block;
   color: var(--tab-ink);
-  font-size: 12.5px;
+  font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.12em;
 }
@@ -2091,7 +2091,7 @@ h1 {
   max-width: 76ch;
   margin: 8px 0 0;
   color: #d5d9dc;
-  font-size: 14.5px;
+  font-size: 15px;
   line-height: 1.5;
 }
 
@@ -2119,7 +2119,7 @@ h1 {
   gap: 16px;
   color: var(--muted);
   border-top: 1px solid var(--hair);
-  font-size: 11.5px;
+  font-size: 12px;
   font-weight: 500;
   letter-spacing: 0.08em;
 }
@@ -2208,7 +2208,7 @@ h1 {
   }
 
   .result-value {
-    font-size: 64px;
+    font-size: 60px;
   }
 }
 
@@ -2343,7 +2343,7 @@ h1 {
   }
 
   .result-value {
-    font-size: 56px;
+    font-size: 46px;
   }
 
   .supporting-metrics,
@@ -2401,7 +2401,7 @@ h1 {
   }
 
   .care-signal h3 {
-    font-size: 44px;
+    font-size: 46px;
   }
 
   .readiness-facts {

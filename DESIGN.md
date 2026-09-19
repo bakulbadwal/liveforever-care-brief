@@ -33,34 +33,92 @@ typography:
     lineHeight: 0.92
     letterSpacing: "-0.02em"
     fontFeature: "tabular-nums"
+  display-sm:
+    fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
+    fontSize: "60px"
+    fontWeight: 700
+    lineHeight: 0.95
+    letterSpacing: "-0.015em"
+    fontFeature: "tabular-nums"
   headline:
     fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
     fontSize: "46px"
     fontWeight: 600
     lineHeight: 1
     letterSpacing: "-0.01em"
+  headline-sm:
+    fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
+    fontSize: "36px"
+    fontWeight: 600
+    lineHeight: 1.02
+    letterSpacing: "-0.01em"
+    fontFeature: "tabular-nums"
   title:
+    fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
+    fontSize: "30px"
+    fontWeight: 600
+    lineHeight: 1.05
+    letterSpacing: "-0.005em"
+  title-sm:
     fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
     fontSize: "26px"
     fontWeight: 600
     lineHeight: 1.05
     letterSpacing: "-0.005em"
+  title-xs:
+    fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
+    fontSize: "24px"
+    fontWeight: 600
+    lineHeight: 1.05
+    letterSpacing: "-0.005em"
+  text-xl:
+    fontFamily: "Barlow, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "20px"
+    fontWeight: 600
+    lineHeight: 1.2
+  text-lg:
+    fontFamily: "Barlow, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "17px"
+    fontWeight: 400
+    lineHeight: 1.45
+  text-md:
+    fontFamily: "Barlow, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "16px"
+    fontWeight: 400
+    lineHeight: 1.5
   body:
     fontFamily: "Barlow, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
     fontSize: "15px"
     fontWeight: 400
     lineHeight: 1.5
+  body-sm:
+    fontFamily: "Barlow, ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.5
+  label-lg:
+    fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
+    fontSize: "13px"
+    fontWeight: 600
+    lineHeight: 1.2
+    letterSpacing: "0.1em"
   label:
     fontFamily: "Barlow Condensed, Arial Narrow, Impact, sans-serif"
     fontSize: "12px"
     fontWeight: 600
     lineHeight: 1.2
     letterSpacing: "0.1em"
+  mono-lg:
+    fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
+    fontSize: "13px"
+    fontWeight: 400
+    lineHeight: 1.5
   mono:
     fontFamily: "ui-monospace, SFMono-Regular, Menlo, Consolas, monospace"
-    fontSize: "12.5px"
+    fontSize: "12px"
     fontWeight: 500
     lineHeight: 1.3
+
 rounded:
   none: "0px"
   point: "50%"
@@ -213,13 +271,13 @@ A near-monochrome paper-and-ink palette with four semantic hues that are each pe
 **Character:** A condensed grotesk for everything that names or measures, a wide grotesk for everything that explains. Headings and numerals are tight and vertical; labels are small caps-style uppercase with wide tracking; text is set at 15px on 1.5. Fonts load from Google Fonts via `<link>` and fall back to system stacks. `font-synthesis: none` is set at the root.
 
 ### Hierarchy
-- **Display numeral** (700, 80px / 64px ≤1040 / 56px ≤680, line-height 0.92, -0.02em, tabular): the Snapshot primary effect, in signal. The care brief's observed signal is the same voice at 60px (44px ≤680), line-height 0.95, -0.015em; readiness counts at 40px (36px ≤680); support metrics, quality stats, and PhenoAge-style context values at 46px / 30px, 700, tabular.
-- **Headline (h1)** (600, 46px / 36px ≤680, line-height 1, -0.01em): view titles, sentence case, max-width 880px. On the care brief the h1 drops to 34px because the document below is the content.
+- **Display numeral** (700, 80px / 60px ≤1040 / 46px ≤680, line-height 0.92, -0.02em, tabular): the Snapshot primary effect, in signal. The care brief's observed signal is the same voice at 60px (46px ≤680), line-height 0.95, -0.015em; readiness counts at 36px; support metrics, quality stats, and PhenoAge-style context values at 46px / 30px, 700, tabular. The whole ramp is fourteen steps — display 80 / 60 / 46 / 36 / 30 / 26 / 24, text 20 / 17 / 16 / 15 / 14, label 13 / 12 — and no other size is used.
+- **Headline (h1)** (600, 46px / 36px ≤680, line-height 1, -0.01em): view titles, sentence case, max-width 880px. On the care brief the h1 drops to 30px because the document below is the content.
 - **Title band (h2)** (600, 36px / 30px ≤680, line-height 1.02, -0.01em, max 24ch): the question inside the black title band.
 - **Section title (h2/h3)** (600, 24–30px, line-height 1.05, -0.005em): panel heads (24px), numbered brief blocks and panels (26px), readiness and the AI band (30px). Sentence case throughout; `text-wrap: balance`.
 - **Body** (400, 15px base; 16–17px for ledes and result copy, 14px for notes and table text, line-height 1.45–1.55): max line length 58–78ch depending on block (`max-width` 58ch, 62ch, 68ch, 72ch, 76ch, 78ch observed).
-- **Label** (600, 11.5–13px, uppercase, 0.08–0.12em tracking): kickers (13px, 0.12em, with a 26x2px ink dash), document labels (12px, 0.12em), field labels and table heads (12–12.5px, 0.1em), legends, footer, schedule key (11.5px, 0.06–0.08em). Tabs are the same voice at 16px/0.07em (14px in the horizontal strip).
-- **Mono** (500, 11.5–13px, line-height 1.3–1.5): trace chips (11.5px), locked contract paths (12.5px, 1px ink border), formulas (13px).
+- **Label** (600, 12–13px, uppercase, 0.08–0.12em tracking): kickers (13px, 0.12em, with a 26x2px ink dash), document labels (12px, 0.12em), field labels and table heads (12–13px, 0.1em), legends, footer, schedule key (12px, 0.06–0.08em). Tabs are the same voice at 16px/0.07em (14px in the horizontal strip).
+- **Mono** (500, 12–13px, line-height 1.3–1.5): trace chips and locked contract paths (12px, the paths with a 1px ink border), formulas (13px).
 
 ### Named Rules
 **The Condensed-Caps Label Rule.** Anything that names a field, a section number, a control, or a status is Barlow Condensed, uppercase, 600, tracked 0.08–0.12em. Headings are not uppercased: they are Barlow Condensed in sentence case. (The direction contract said "caps for titles"; the build uppercases labels only and keeps every h1–h4 in sentence case. The build is canonical.)
@@ -234,7 +292,7 @@ The shell is a two-column grid: a 236px sticky binder spine (full viewport heigh
 
 Inside the page, panels are paper sheets with 1.5px ink borders and shared internal rhythm: 24–28px panel padding on Snapshot/Experiment/Data views, 36px horizontal padding on every band and block of the care sheet, 20px gutters between panels and layout columns. Section bars and toolbars are 60–66px tall. Rows are 12–18px tall blocks separated by 1px hairlines; large-numeral cells are 200px minimum height on Snapshot and 128px for journey steps. Two-column layouts use ratio grids (1.65fr/0.75fr overview; 1.15fr/2fr result band; 1.55fr/0.75fr title band; 1.15fr/0.85fr signal row; 1.45fr/1fr data) with a minimum of 300–360px on the narrow column. Checklists and question lists run in two equal columns separated by a hairline.
 
-Breakpoints, in order: 1140px (title band and signal row stack), 1040px (all two- and three-column grids collapse, the AI ledger columns stack with hairline tops, the display numeral drops to 64px), 880px (the spine becomes a horizontal, scrollable numbered tab strip 60px tall; brand copy and the spine footnote hide; top bar goes static; side padding drops to 20px; the schedule becomes an auto-fill grid of 96px minimum cells), and 680px (top bar wraps, side padding 14px, sheet padding 20px, 2x2 metric grids, single-column readiness, table text 13px with wrapping cells).
+Breakpoints, in order: 1140px (title band and signal row stack), 1040px (all two- and three-column grids collapse, the AI ledger columns stack with hairline tops, the display numeral drops to 60px), 880px (the spine becomes a horizontal, scrollable numbered tab strip 60px tall; brand copy and the spine footnote hide; top bar goes static; side padding drops to 20px; the schedule becomes an auto-fill grid of 96px minimum cells), and 680px (top bar wraps, side padding 14px, sheet padding 20px, 2x2 metric grids, single-column readiness, table text 13px with wrapping cells).
 
 Print shows the brief alone: spine, top bar, care title bar, AI band, footer, and the other views are hidden; the sheet loses its border and shadow; dark bands force `print-color-adjust: exact`; the title band, signal, blocks, questions, and footer avoid page breaks; trace chips are hidden.
 
@@ -254,7 +312,7 @@ Depth is drawn, not lit. Structure comes from ink rules and dark bands; shadows 
 
 Square everywhere. `border-radius` is 0 on every panel, button, badge, pill, tab, chip, day cell, status square, check square, and marker; the only round form in the build is the chart's data points (SVG circles) and their 11px legend key (`border-radius: 50%`). The 7-day-mean line key is a flat 18x2.5px signal rule.
 
-Borders carry the form language: 1.5px ink on panels, buttons, badges, the trace toggle, the segmented control, the decision-rule box, the warning box (in caution), and the claim pill (in caution); 2px ink on the memory item; 1px ink on locked-path chips; 1px hairline between rows and around the spine footnote (in spine-2). Dotted leaders are `2px dotted` in hair on paper and #3f4549 on ink, drawn as a flex-grown `::after` pulled up 3px to sit on the baseline. Status and state are shown with small filled squares (8–14px): signal, caution, muted, or currentColor. Section numbers in the spine are two-digit CSS counters (`decimal-leading-zero`); numbered blocks and questions carry a 22–24px condensed numeral in a fixed 40–44px gutter.
+Borders carry the form language: 1.5px ink on panels, buttons, badges, the trace toggle, the segmented control, the decision-rule box, the warning box (in caution), and the claim pill (in caution); 2px ink on the memory item; 1px ink on locked-path chips; 1px hairline between rows and around the spine footnote (in spine-2). Dotted leaders are `2px dotted` in hair on paper and #3f4549 on ink, drawn as a flex-grown `::after` pulled up 3px to sit on the baseline. Status and state are shown with small filled squares (8–14px): signal, caution, muted, or currentColor. Section numbers in the spine are two-digit CSS counters (`decimal-leading-zero`); numbered blocks and questions carry a 24px condensed numeral in a fixed 40–44px gutter.
 
 ## Components
 
@@ -269,10 +327,10 @@ The controls feel like the printed handbook they sit in: square, ink-bordered, c
 - **Disclosure button (`.method-details summary`):** styled as the primary button; hover to signal; native marker hidden.
 
 ### Chips
-- **Claim pill:** paper fill, 1.5px caution border, caution text, 26px, condensed caps 11.5px/0.1em. Only ever says "association only" or a sibling claim label; caution is the meaning.
+- **Claim pill:** paper fill, 1.5px caution border, caution text, 26px, condensed caps 12px/0.1em. Only ever says "association only" or a sibling claim label; caution is the meaning.
 - **Demo badge:** paper, 1.5px ink border, 34px, condensed caps 12px, with an 8px signal square before the text. Reads "Synthetic care workflow" and stays visible in the top bar on every view.
-- **Locked-path chip (`.ai-paths li`):** paper, 1px ink border, mono 12.5px, 5px 8px padding; the immutable contract paths in the AI ledger.
-- **Trace chip (`[data-trace]::after`):** signal text on signal-soft, mono 11.5px/500, 3px 7px, `width: fit-content`, prefixed with an arrow ("→ "); hidden at rest, block when `body.trace-on`, hidden in print.
+- **Locked-path chip (`.ai-paths li`):** paper, 1px ink border, mono 12px, 5px 8px padding; the immutable contract paths in the AI ledger.
+- **Trace chip (`[data-trace]::after`):** signal text on signal-soft, mono 12px/500, 3px 7px, `width: fit-content`, prefixed with an arrow ("→ "); hidden at rest, block when `body.trace-on`, hidden in print.
 
 ### Cards / Containers
 - **Corner Style:** square.
@@ -283,15 +341,15 @@ The controls feel like the printed handbook they sit in: square, ink-bordered, c
 - **Dark band variant:** ink fill, paper text, band greys for secondary text and leaders; used for the care title band, the sheet footer, the privacy band, the memory item's head bar, and the chart tooltip (ink, paper text, 13px, 10px 12px).
 
 ### Inputs / Fields
-- **Segmented control (HRV / Sleep):** 1.5px ink frame, 36px buttons at 0 14px, condensed caps 12.5px, 1.5px ink dividers; active segment inverts to ink/paper. No radius, no shadow.
+- **Segmented control (HRV / Sleep):** 1.5px ink frame, 36px buttons at 0 14px, condensed caps 13px, 1.5px ink dividers; active segment inverts to ink/paper. No radius, no shadow.
 - **Trace toggle:** same body as the demo badge with a 10px hollow square mark; pressed state inverts to ink/paper and fills the mark with signal.
 - **Checklist control (`.check`):** 22px ink square, paper check glyph, 700, in a 24px gutter beside 15px text rows divided by hairlines.
 - The product has no text inputs; do not invent a field style.
 
 ### Navigation
-- **Binder spine:** 236px, spine fill, sticky. Brand row (36px tab-ink monogram square, 19px condensed name, 12px tab-muted subtitle) over a 1px spine-2 rule. Tabs are 52px tall, condensed 16px/600/0.07em, tab-muted text, with a two-digit counter at left in 12px/0.1em at 0.8 opacity.
+- **Binder spine:** 236px, spine fill, sticky. Brand row (36px tab-ink monogram square, 20px condensed name, 12px tab-muted subtitle) over a 1px spine-2 rule. Tabs are 52px tall, condensed 16px/600/0.07em, tab-muted text, with a two-digit counter at left in 12px/0.1em at 0.8 opacity.
 - **Hover:** tab-ink text on spine-2. **Active:** ink text on ground, flush with the page, counter in signal at full opacity.
-- **Footnote:** 12.5px tab-muted text in a 1px spine-2 box pinned to the bottom, always stating that records are synthetic.
+- **Footnote:** 13px tab-muted text in a 1px spine-2 box pinned to the bottom, always stating that records are synthetic.
 - **Mobile (≤880px):** the spine becomes a horizontal, scroll-hidden tab strip with the monogram at left; tabs 60px tall, 14px, nowrap.
 
 ### Dotted-Leader Row

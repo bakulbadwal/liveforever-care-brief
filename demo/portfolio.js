@@ -142,6 +142,13 @@
       return '<li>' + item + '</li>';
     }).join('');
 
+    var contract = brief.ai_contract || {};
+    function contractList(items) {
+      return (Array.isArray(items) ? items : []).map(function (item) {
+        return '<li>' + item + '</li>';
+      }).join('') || '<li class="ai-ledger-empty">Not specified in this contract.</li>';
+    }
+
     var missingEvidence = brief.missing_evidence.map(function (item) {
       return '<li>' + item + '</li>';
     }).join('');
@@ -343,12 +350,28 @@
         '</article>',
 
         '<section class="ai-role-band" aria-labelledby="ai-role-heading">',
-          '<div>',
-            '<p class="kicker">Bounded AI layer</p>',
-            '<h2 id="ai-role-heading">AI prepares the review. It does not own the evidence.</h2>',
-            '<p>', brief.ai_contract.role, ' ', brief.ai_contract.human_gate, '</p>',
+          '<div class="ai-role-head">',
+            '<div>',
+              '<p class="kicker">Bounded AI layer</p>',
+              '<h2 id="ai-role-heading">AI prepares the review. It does not own the evidence.</h2>',
+              '<p>', contract.role, ' ', contract.human_gate, '</p>',
+            '</div>',
+            '<button class="button" type="button" data-open-method="true">Inspect the contract</button>',
           '</div>',
-          '<button class="button" type="button" data-open-method="true">Inspect the contract</button>',
+          '<div class="ai-ledger">',
+            '<div class="ai-ledger-col ai-may">',
+              '<h3>AI may</h3>',
+              '<ul>', contractList(contract.allowed_actions), '</ul>',
+            '</div>',
+            '<div class="ai-ledger-col ai-may-not">',
+              '<h3>AI may not</h3>',
+              '<ul>', contractList(contract.forbidden_actions), '</ul>',
+            '</div>',
+            '<div class="ai-ledger-col ai-locked">',
+              '<h3>Locked by code</h3>',
+              '<ul class="ai-paths">', contractList(contract.immutable_paths), '</ul>',
+            '</div>',
+          '</div>',
         '</section>',
       '</section>',
 

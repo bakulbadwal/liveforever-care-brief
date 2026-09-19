@@ -832,12 +832,84 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
 
 .ai-role-band {
   margin-top: 16px;
-  padding: 22px 24px;
+  padding: 22px 24px 24px;
+  border-left: 4px solid var(--blue);
+}
+
+.ai-role-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  border-left: 4px solid var(--blue);
+}
+
+.ai-ledger {
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-top: 1px solid var(--line);
+}
+
+.ai-ledger-col {
+  min-width: 0;
+  padding: 16px 20px 4px 0;
+}
+
+.ai-ledger-col + .ai-ledger-col {
+  padding-left: 20px;
+  border-left: 1px solid var(--line);
+}
+
+.ai-ledger-col h3 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.ai-may h3 { color: var(--green); }
+.ai-may-not h3 { color: var(--coral); }
+.ai-locked h3 { color: var(--ink); }
+
+.ai-ledger-col ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ai-ledger-col li + li {
+  margin-top: 8px;
+}
+
+.ai-may ul { color: var(--ink); }
+.ai-may-not ul { color: #6f3a30; }
+
+.ai-paths {
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.ai-paths li {
+  padding: 4px 8px;
+  color: var(--ink);
+  background: var(--surface-muted);
+  border: 1px solid var(--line-strong);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 12px;
+}
+
+.ai-paths li + li {
+  margin-top: 0;
+}
+
+.ai-ledger-empty {
+  color: var(--muted);
+  list-style: none;
+  margin-left: -18px;
 }
 
 .ai-role-band h2 {
@@ -1420,8 +1492,19 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline: 2px soli
   .overview-grid,
   .experiment-layout,
   .data-layout,
-  .care-columns {
+  .care-columns,
+  .ai-ledger {
     grid-template-columns: 1fr;
+  }
+
+  .ai-ledger-col + .ai-ledger-col {
+    padding-left: 0;
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .ai-role-head {
+    flex-wrap: wrap;
   }
 
   .method-panel {

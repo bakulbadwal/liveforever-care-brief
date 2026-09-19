@@ -420,11 +420,6 @@ summary:focus-visible {
   margin-top: 6px;
 }
 
-.trace-on .care-signal::after {
-  grid-column: 1 / -1;
-  margin-top: 0;
-}
-
 @keyframes trace-in {
   from { opacity: 0; transform: translateY(-3px); }
   to { opacity: 1; transform: translateY(0); }
@@ -438,7 +433,7 @@ summary:focus-visible {
   width: 100%;
   max-width: 1300px;
   margin: 0 auto;
-  padding: 40px 40px 60px;
+  padding: 32px 40px 60px;
 }
 
 .view {
@@ -784,17 +779,24 @@ h1 {
   background: var(--ink);
 }
 
+.workspace {
+  display: flex;
+  flex-direction: column;
+}
+
 .chart-wrap {
   position: relative;
-  min-height: 360px;
+  flex: 1;
+  display: grid;
+  min-height: 320px;
   padding: 22px 22px 12px;
 }
 
 .chart-wrap svg {
   display: block;
   width: 100%;
-  height: auto;
-  min-height: 280px;
+  height: 100%;
+  min-height: 276px;
   overflow: visible;
 }
 
@@ -878,7 +880,8 @@ h1 {
 }
 
 .reading-facts {
-  margin: 20px 0 0;
+  margin: auto 0 0;
+  padding-top: 20px;
   border-top: 1.5px solid var(--rule);
 }
 
@@ -917,7 +920,7 @@ h1 {
 }
 
 .actions {
-  margin-top: auto;
+  margin-top: 0;
   padding-top: 22px;
   display: flex;
   flex-wrap: wrap;
@@ -929,7 +932,7 @@ h1 {
 /* ------------------------------------------------------------------ */
 
 .care-titlebar {
-  margin-bottom: 18px;
+  margin-bottom: 14px;
   display: flex;
   align-items: flex-end;
   flex-wrap: wrap;
@@ -939,6 +942,16 @@ h1 {
 
 .care-titlebar .page-intro {
   margin-bottom: 0;
+}
+
+/* On the brief the page title is a label; the document below carries the content. */
+#view-care h1 {
+  font-size: 34px;
+}
+
+#view-care .page-intro > p:last-child {
+  margin-top: 8px;
+  font-size: 15px;
 }
 
 .care-actions {
@@ -970,7 +983,7 @@ h1 {
 /* Title band: black bar, white condensed title, dotted-leader facts    */
 
 .care-sheet-head {
-  padding: 26px 36px 28px;
+  padding: 22px 36px 24px;
   display: grid;
   grid-template-columns: minmax(0, 1.55fr) minmax(300px, 0.75fr);
   gap: 48px;
@@ -988,12 +1001,13 @@ h1 {
 }
 
 .care-sheet-head .document-label {
-  color: #9fe0cc;
+  color: var(--tab-ink);
+  opacity: 0.8;
 }
 
 .care-sheet-head h2 {
   max-width: 24ch;
-  font-size: 40px;
+  font-size: 36px;
   font-weight: 600;
   line-height: 1.02;
   letter-spacing: -0.01em;
@@ -1001,7 +1015,7 @@ h1 {
 
 .care-sheet-head p {
   max-width: 62ch;
-  margin: 14px 0 0;
+  margin: 10px 0 0;
   color: #c9ced2;
   font-size: 16px;
   line-height: 1.5;
@@ -1053,7 +1067,7 @@ h1 {
 /* Readiness: status line + three large tabular facts                  */
 
 .care-readiness {
-  padding: 24px 36px 22px;
+  padding: 20px 36px 18px;
   border-bottom: 1.5px solid var(--rule);
 }
 
@@ -1087,7 +1101,7 @@ h1 {
 }
 
 .readiness-facts {
-  margin: 18px 0 14px;
+  margin: 14px 0 12px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 28px;
@@ -1108,7 +1122,7 @@ h1 {
 .readiness-facts dd {
   margin: 6px 0 0;
   font-family: var(--display);
-  font-size: 44px;
+  font-size: 40px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   line-height: 1;
@@ -1134,10 +1148,10 @@ h1 {
 /* Observed signal + memory items box                                  */
 
 .care-signal {
-  padding: 32px 36px 34px;
+  padding: 28px 36px 30px;
   display: grid;
-  grid-template-columns: minmax(0, 1.05fr) minmax(380px, 0.95fr);
-  gap: 44px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(360px, 0.85fr);
+  gap: 40px;
   align-items: center;
   background: var(--paper);
   border-bottom: 1.5px solid var(--rule);
@@ -1149,7 +1163,7 @@ h1 {
 
 .care-signal h3 {
   color: var(--signal);
-  font-size: 58px;
+  font-size: 60px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.015em;
@@ -1533,7 +1547,7 @@ h1 {
 
 .care-sheet-foot strong {
   display: block;
-  color: #9fe0cc;
+  color: var(--tab-ink);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -1814,6 +1828,10 @@ h1 {
   margin-top: 20px;
   padding: 16px 18px 18px;
   border: 1.5px solid var(--ink);
+}
+
+.schedule-panel .decision {
+  margin: 24px 28px 26px;
   font-size: 15px;
   line-height: 1.5;
 }
@@ -2066,7 +2084,7 @@ h1 {
 
 .privacy-band strong {
   display: block;
-  color: #9fe0cc;
+  color: var(--tab-ink);
   font-size: 12.5px;
   font-weight: 600;
   letter-spacing: 0.12em;

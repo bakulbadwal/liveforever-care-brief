@@ -114,21 +114,21 @@
       return '<li>' + item + '</li>';
     }).join('');
 
-    var warnings = a.quality.warnings.map(function (item) {
-      return '<div class="warning">' + item + '</div>';
+    var warnings = a.quality.warnings.map(function (item, index) {
+      return '<div class="warning" data-trace="evidence_summary.quality.warnings[' + index + ']">' + item + '</div>';
     }).join('');
 
     var calculations = a.calculation_provenance.map(function (item) {
       return '<div>' + item + '</div>';
     }).join('');
 
-    var careSources = brief.source_ledger.map(function (source) {
+    var careSources = brief.source_ledger.map(function (source, index) {
       var coverage = Object.entries(source.coverage || {}).map(function (entry) {
         var names = { hrv_ms: 'HRV', sleep_hours: 'sleep', resting_hr: 'resting HR', caffeine_cutoff_2pm: 'timing', caffeine_mg: 'dose', training_load: 'training', alcohol_units: 'alcohol' };
         return (names[entry[0]] || entry[0]) + ': ' + entry[1];
       }).join(' · ');
       return [
-        '<div class="care-source">',
+        '<div class="care-source" data-trace="source_ledger[' + index + ']">',
         '<div><span>', source.label, '</span><strong>', source.status, '</strong></div>',
         '<div><p>', source.provenance, '</p><p class="source-role">', source.role, '</p>',
         coverage ? '<p class="source-coverage">Recorded values — ' + coverage + '</p>' : '',
@@ -168,7 +168,7 @@
         '</div>',
 
         '<div class="result-band">',
-          '<div class="primary-result">',
+          '<div class="primary-result" data-trace="evidence_summary.primary_effect">',
             '<div class="label">Observed HRV difference</div>',
             '<div class="result-value">', signed(primary.effect), ' ms</div>',
             '<p class="result-copy">', brief.signal_headline, '.</p>',
@@ -178,17 +178,17 @@
             '</div>',
           '</div>',
           '<div class="supporting-metrics">',
-            '<div class="support-metric">',
+            '<div class="support-metric" data-trace="evidence_summary.secondary_effects[sleep_hours]">',
               '<div class="label">Sleep duration</div>',
               '<strong>', signed(sleep.effect), ' h</strong>',
               '<p>Difference between cutoff and usual-timing nights.</p>',
             '</div>',
-            '<div class="support-metric">',
+            '<div class="support-metric" data-trace="evidence_summary.secondary_effects[resting_hr]">',
               '<div class="label">Resting HR</div>',
               '<strong>', signed(rhr.effect), ' bpm</strong>',
               '<p>Difference between cutoff and usual-timing nights.</p>',
             '</div>',
-            '<div class="support-metric">',
+            '<div class="support-metric" data-trace="evidence_summary.quality.paired_days">',
               '<div class="label">Paired nights</div>',
               '<strong>', a.quality.paired_days, '</strong>',
               '<p>', a.quality.condition_on_n, ' cutoff and ', a.quality.condition_off_n, ' usual-timing observations.</p>',
@@ -238,9 +238,9 @@
               '<div class="chart-tooltip" id="chart-tooltip" role="status" hidden></div>',
             '</div>',
             '<div class="legend">',
-              '<span><i style="background:var(--green)"></i>Cutoff by 2 PM</span>',
-              '<span><i style="background:var(--coral)"></i>Usual timing</span>',
-              '<span><i style="background:#87959a"></i>Timing unavailable</span>',
+              '<span><i style="background:var(--day-on)"></i>Cutoff by 2 PM</span>',
+              '<span><i style="background:var(--day-off)"></i>Usual timing</span>',
+              '<span><i style="background:#9aa0a4;border-color:#9aa0a4"></i>Timing unavailable</span>',
               '<span><i class="line-key"></i>7-calendar-day mean</span>',
             '</div>',
           '</section>',
@@ -249,9 +249,9 @@
             '<h2>What this means</h2>',
             '<p>', brief.plain_language_signal, '</p>',
             '<div class="reading-facts">',
-              '<div class="reading-fact"><span>Coverage</span><strong>', Math.round(a.quality.coverage * 100), '% of calendar days</strong></div>',
-              '<div class="reading-fact"><span>Balance</span><strong>', a.quality.condition_on_n, ' vs ', a.quality.condition_off_n, ' nights</strong></div>',
-              '<div class="reading-fact"><span>Data grade</span><strong>', a.quality.grade, ' &middot; ', a.quality.score, '/100</strong></div>',
+              '<div class="reading-fact" data-trace="evidence_summary.quality.coverage"><span>Coverage</span><strong>', Math.round(a.quality.coverage * 100), '% of calendar days</strong></div>',
+              '<div class="reading-fact" data-trace="evidence_summary.quality.condition_on_n / condition_off_n"><span>Balance</span><strong>', a.quality.condition_on_n, ' vs ', a.quality.condition_off_n, ' nights</strong></div>',
+              '<div class="reading-fact" data-trace="evidence_summary.quality.grade · score"><span>Data grade</span><strong>', a.quality.grade, ' &middot; ', a.quality.score, '/100</strong></div>',
             '</div>',
             '<div class="actions">',
               '<button class="button primary" type="button" data-go="care">Prepare care brief</button>',
@@ -294,22 +294,22 @@
           '<section class="care-readiness" aria-labelledby="readiness-heading">',
             '<div class="readiness-heading"><span class="status-dot ', readiness.status, '" aria-hidden="true"></span><div><span class="document-label">Evidence readiness</span><h3 id="readiness-heading">', readiness.label, '</h3></div></div>',
             '<dl class="readiness-facts">',
-              '<div><dt>Paired nights</dt><dd>', primary.n_on + primary.n_off, '<small>', primary.n_on, ' cutoff / ', primary.n_off, ' usual</small></dd></div>',
-              '<div><dt>Sources supplied</dt><dd>', readiness.sources_supplied, ' / ', readiness.sources_total, '<small>', readiness.core_sources_linked ? 'Comparison sources linked' : 'Comparison source links missing', '</small></dd></div>',
-              '<div><dt>Quality warnings</dt><dd>', readiness.warning_count, '<small>Grade ', a.quality.grade, ' · ', a.quality.score, '/100</small></dd></div>',
+              '<div data-trace="evidence_summary.primary_effect.n_on + n_off"><dt>Paired nights</dt><dd>', primary.n_on + primary.n_off, '<small>', primary.n_on, ' cutoff / ', primary.n_off, ' usual</small></dd></div>',
+              '<div data-trace="readiness.sources_supplied / sources_total"><dt>Sources supplied</dt><dd>', readiness.sources_supplied, ' / ', readiness.sources_total, '<small>', readiness.core_sources_linked ? 'Comparison sources linked' : 'Comparison source links missing', '</small></dd></div>',
+              '<div data-trace="readiness.warning_count"><dt>Quality warnings</dt><dd>', readiness.warning_count, '<small>Grade ', a.quality.grade, ' · ', a.quality.score, '/100</small></dd></div>',
             '</dl>',
             '<p class="readiness-boundary">', readiness.boundary, '</p>',
           '</section>',
 
-          '<section class="care-signal ', readiness.signal === 'higher' && readiness.status === 'reviewable' ? '' : 'signal-neutral', '" aria-labelledby="care-signal-heading">',
+          '<section class="care-signal ', readiness.signal === 'higher' && readiness.status === 'reviewable' ? '' : 'signal-neutral', '" data-trace="evidence_summary.primary_effect" aria-labelledby="care-signal-heading">',
             '<div>',
               '<span class="document-label">Observed signal</span>',
               '<h3 id="care-signal-heading">', brief.signal_headline, '</h3>',
               '<p>', brief.plain_language_signal, '</p>',
             '</div>',
             '<div class="care-lock">',
-              '<span aria-hidden="true">&#10003;</span>',
-              '<p><strong>Values locked by code</strong>AI can explain this result, but cannot rewrite its effect, interval, samples, or sources.</p>',
+              '<div class="care-lock-head"><span aria-hidden="true">&#10003;</span><strong>Values locked by code</strong></div>',
+              '<p>AI can explain this result, but cannot rewrite its effect, interval, samples, or sources.</p>',
             '</div>',
           '</section>',
 
@@ -330,7 +330,7 @@
             '</section>',
           '</div>',
 
-          '<section class="care-block care-supporting" aria-labelledby="supporting-heading">',
+          '<section class="care-block care-supporting" data-trace="evidence_summary.secondary_effects" aria-labelledby="supporting-heading">',
             '<h3 id="supporting-heading">Supporting outcomes</h3><p>Cutoff minus usual timing; each outcome has its own paired sample.</p>',
             '<div class="evidence-table-wrap"><table class="evidence-table"><thead><tr><th scope="col">Outcome</th><th scope="col">Difference</th><th scope="col">95% interval</th><th scope="col">Cutoff / usual</th></tr></thead><tbody>',
               '<tr><th scope="row">Sleep duration</th><td>', signed(sleep.effect), ' h</td><td>', signed(sleep.ci_low), ' to ', signed(sleep.ci_high), '</td><td>', sleep.n_on == null ? '—' : sleep.n_on, ' / ', sleep.n_off == null ? '—' : sleep.n_off, '</td></tr>',
@@ -386,8 +386,8 @@
             '<div class="schedule-head">',
               '<div><h2 id="schedule-heading">', p.title, '</h2><p>', p.design, '</p></div>',
               '<div class="schedule-key">',
-                '<span><i style="background:var(--green)"></i>Cutoff</span>',
-                '<span><i style="background:var(--coral)"></i>Usual</span>',
+                '<span><i style="background:var(--day-on)"></i>Cutoff</span>',
+                '<span><i style="background:var(--day-off)"></i>Usual</span>',
               '</div>',
             '</div>',
             schedule ? '<div class="schedule">' + schedule + '</div>' : '<p class="panel-lede">No dated schedule is available because no observation window was supplied.</p>',
@@ -412,10 +412,10 @@
         '</div>',
 
         '<div class="quality-strip" aria-label="Data quality summary">',
-          '<div class="quality-stat"><div class="label">Evidence grade</div><strong>', a.quality.grade, '</strong><p>', a.quality.score, ' out of 100</p></div>',
-          '<div class="quality-stat"><div class="label">Calendar coverage</div><strong>', Math.round(a.quality.coverage * 100), '%</strong><p>', a.dataset.recorded_days, ' fictional recorded days</p></div>',
-          '<div class="quality-stat"><div class="label">Cutoff nights</div><strong>', a.quality.condition_on_n, '</strong><p>Paired with next-day outcomes</p></div>',
-          '<div class="quality-stat"><div class="label">Usual nights</div><strong>', a.quality.condition_off_n, '</strong><p>Paired with next-day outcomes</p></div>',
+          '<div class="quality-stat" data-trace="evidence_summary.quality.grade · score"><div class="label">Evidence grade</div><strong>', a.quality.grade, '</strong><p>', a.quality.score, ' out of 100</p></div>',
+          '<div class="quality-stat" data-trace="evidence_summary.quality.coverage"><div class="label">Calendar coverage</div><strong>', Math.round(a.quality.coverage * 100), '%</strong><p>', a.dataset.recorded_days, ' fictional recorded days</p></div>',
+          '<div class="quality-stat" data-trace="evidence_summary.quality.condition_on_n"><div class="label">Cutoff nights</div><strong>', a.quality.condition_on_n, '</strong><p>Paired with next-day outcomes</p></div>',
+          '<div class="quality-stat" data-trace="evidence_summary.quality.condition_off_n"><div class="label">Usual nights</div><strong>', a.quality.condition_off_n, '</strong><p>Paired with next-day outcomes</p></div>',
         '</div>',
 
         '<div class="data-layout">',
@@ -589,7 +589,7 @@
     var valid = values.filter(function (value) { return typeof value === 'number' && Number.isFinite(value); });
     document.getElementById('chart-tooltip').hidden = true;
     if (!valid.length) {
-      svg.innerHTML = '<title id="chart-title">Recovery timeline unavailable</title><desc id="chart-description">No recorded values for this metric.</desc><text x="380" y="125" text-anchor="middle" fill="#627176" font-size="14">No recorded values for this metric</text>';
+      svg.innerHTML = '<title id="chart-title">Recovery timeline unavailable</title><desc id="chart-description">No recorded values for this metric.</desc><text x="380" y="125" text-anchor="middle" fill="#6b7276" font-size="14">No recorded values for this metric</text>';
       return;
     }
     var min = Math.min.apply(null, valid) - meta.padding;
@@ -627,8 +627,8 @@
       var yy = top + (bottom - top) * fraction;
       var label = metric === 'hrv_ms' ? value.toFixed(0) : value.toFixed(1);
       return [
-        '<line x1="', left, '" y1="', yy, '" x2="', right, '" y2="', yy, '" stroke="#d6dfdc"/>',
-        '<text x="', left - 9, '" y="', yy + 4, '" text-anchor="end" fill="#627176" font-size="11.5">', label, '</text>'
+        '<line x1="', left, '" y1="', yy, '" x2="', right, '" y2="', yy, '" stroke="#e3e1da"/>',
+        '<text x="', left - 9, '" y="', yy + 4, '" text-anchor="end" fill="#6b7276" font-size="11.5">', label, '</text>'
       ].join('');
     }).join('');
 
@@ -641,8 +641,8 @@
       return [
         '<circle class="chart-point" tabindex="0" data-index="', index, '" ',
         'cx="', x(index), '" cy="', y(point[metric]), '" r="4.5" ',
-        'fill="', timing == null ? '#87959a' : timing >= 0.5 ? '#14745f' : '#c45b49', '" ',
-        'stroke="#ffffff" stroke-width="1.5">',
+        'fill="', timing == null ? '#9aa0a4' : timing >= 0.5 ? '#101315' : '#ffffff', '" ',
+        'stroke="', timing == null ? '#9aa0a4' : '#101315', '" stroke-width="1.75">',
         '<title>', shortDate(point.date), ': ', fmt(point[metric], meta.digits), ' ', meta.unit, '. ', condition, '</title>',
         '</circle>'
       ].join('');
@@ -651,7 +651,7 @@
     var dateIndexes = Array.from(new Set([0, Math.floor((timeline.length - 1) / 2), timeline.length - 1]));
     var dates = dateIndexes.map(function (index) {
       return [
-        '<text x="', x(index), '" y="234" text-anchor="middle" fill="#627176" font-size="11.5">',
+        '<text x="', x(index), '" y="234" text-anchor="middle" fill="#6b7276" font-size="11.5">',
         shortDate(timeline[index].date),
         '</text>'
       ].join('');
@@ -661,10 +661,10 @@
       '<title id="chart-title">Recovery timeline</title>',
       '<desc id="chart-description">', meta.axis, ' by prior-day caffeine timing. Use Tab to inspect individual points.</desc>',
       grid,
-      '<path d="', pathParts.join(' '), '" fill="none" stroke="#87959a" stroke-width="2.5"/>',
+      '<path d="', pathParts.join(' '), '" fill="none" stroke="#0f6b57" stroke-width="2.25"/>',
       dots,
       dates,
-      '<text x="', left, '" y="13" fill="#627176" font-size="11.5">', meta.axis, '</text>'
+      '<text x="', left, '" y="13" fill="#6b7276" font-size="11.5">', meta.axis, '</text>'
     ].join('');
 
     bindChartTooltips(timeline, metric);
@@ -712,6 +712,14 @@
   document.querySelectorAll('[data-view]').forEach(function (button) {
     button.addEventListener('click', function () {
       navigate(button.dataset.view);
+    });
+  });
+
+  document.querySelectorAll('[data-trace-toggle]').forEach(function (button) {
+    button.addEventListener('click', function () {
+      var on = !document.body.classList.contains('trace-on');
+      document.body.classList.toggle('trace-on', on);
+      button.setAttribute('aria-pressed', String(on));
     });
   });
 

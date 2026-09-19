@@ -4,12 +4,24 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="LiveForever turns fragmented longitudinal health data into a source-linked personal evidence brief for clinician review.">
-  <meta name="theme-color" content="#192628">
+  <meta name="theme-color" content="#15181b">
   <title>LiveForever | Personal Evidence, Ready for Review</title>
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@500;600;700&display=swap">
   <link rel="stylesheet" href="portfolio.css">
 </head>
 <body>
+  <!--
+    DIRECTION CONTRACT (impeccable seed e99468d4 · assigned direction 4 of 7 · mode operate)
+    THESIS: A clinical handoff that behaves like a quick reference handbook — a checklist page where every value has a locked source and nothing is improvised. It refuses the health-dashboard default of tinted cards, decorative color, and a model "insight" the reader is asked to trust.
+    OWN-WORLD: Paper and ink. 1.5px ink rules, a binder-dark spine with numbered bleed tabs, Barlow Condensed caps for titles/labels, Barlow text, tabular numerals, dotted leaders between an item and its value, boxed "memory items" for what may not be changed. Color only as state: signal green = locked/normal, amber = caution, red = prohibition, blue = the bounded AI.
+    STORY: The reader sees one question, one locked number with its interval and sample, the sources it came from, what remains uncertain, and exactly what the AI may and may not do — then decides whether to print or share it.
+    FIRST VIEWPORT: Care brief. Title block, the black title band carrying the question and its dotted-leader facts, readiness with three large tabular counts, then the observed signal beside the boxed Values locked by code memory item. Primary actions (Download Markdown / JSON / Print brief) sit top right.
+    FORM: Aviation QRH checklist page, candidate 4 on the ordered list; staging: x-ray reveal as the "Trace values" toggle in the top bar, which exposes the contract path behind each locked number.
+    FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md
+  -->
   <div class="app-shell">
     <aside class="sidebar">
       <div class="brand">
@@ -42,7 +54,10 @@
             <span>Fictional demo persona &middot; age 34</span>
           </div>
         </div>
-        <div class="demo-badge">Synthetic care workflow</div>
+        <div class="topbar-tools">
+          <button class="trace-toggle" type="button" data-trace-toggle aria-pressed="false" title="Show the locked contract path behind each number"><span class="trace-toggle-mark" aria-hidden="true"></span>Trace values</button>
+          <div class="demo-badge">Synthetic care workflow</div>
+        </div>
       </header>
 
       <main class="content" id="app">

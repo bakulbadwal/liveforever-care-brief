@@ -65,9 +65,13 @@ A deterministic verifier in the same module checks the draft before it can ship:
 - The draft carries the SHA-256 of the contract it was written from, so a regenerated contract fails a stale draft.
 - `ingest` refuses to write a draft that fails verification, and `tests/test_ai_draft.py` re-runs the check on every test run.
 
-Result for the shipped draft: 17 numbers cited, 0 outside the contract, 0 forbidden claims. On the page, every number in the draft is wrapped and shown green when it exists in the locked contract and red when it does not, with a running count ("26 / 26 numbers cited match the locked contract"; 26 on the page because the same numbers appear in several sentences) beside the build-time verifier result. Switch on **Trace values** in the top bar to see, under each locked number, the contract path it comes from; the reveal is CSS-only, off by default, and hidden in print.
+Result for the shipped draft: 17 numbers cited, 0 outside the contract, 0 forbidden claims. On the page, every number in the draft is wrapped and shown green when it exists in the locked contract and red when it does not, with a running count ("26 / 26 number citations re-checked on this page against the locked contract"; 26 citations of the 17 distinct values, because the same numbers appear in several sentences) beside the build-time verifier result. Switch on **Trace values** in the top bar to see, under each locked number, the contract path it comes from; the reveal is CSS-only, off by default, and hidden in print.
 
 ![The cached AI draft block with Trace values on: 26 of 26 cited numbers match the locked contract and the build-time verifier passed](docs/liveforever-care-brief-ai-draft-2026-10-10.png)
+
+![Trace values switched on: a scan line sweeps the brief, every locked number reveals its contract path, and the cached draft's citations fill green](docs/liveforever-trace-values.gif)
+
+<sub>Trace values, recorded from the build on 2026-10-10 (9 seconds, no audio).</sub>
 
 Provenance recorded in the file: model `claude-fable-5-1 (Anthropic)`, runner "Claude Code, using the prompt and schema from liveforever_lab.ai_draft", generated 2026-10-10. The Skill targets GPT-5.6 through Codex; the shipped demo draft was produced by Claude under the same prompt and rules. The contract and the verifier are model-agnostic, which is the point.
 

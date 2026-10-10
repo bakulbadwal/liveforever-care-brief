@@ -56,7 +56,7 @@ The public demo contains one fictional persona, Maya Chen, and no PHI. It does n
 - [`docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md`](docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md) — reference screen order and timings; the current recording script is local at `~/Desktop/Hackathons/1-break-the-barrier/SCRIPT-2026-10-10.md`.
 - [`docs/BREAK_THE_BARRIER_CHECKLIST.md`](docs/BREAK_THE_BARRIER_CHECKLIST.md) — final recording and submission checklist.
 - [`docs/BREAK_THE_BARRIER_PROVENANCE.md`](docs/BREAK_THE_BARRIER_PROVENANCE.md) — what existed before and what this extension added.
-- [`docs/liveforever-care-brief-hero.png`](docs/liveforever-care-brief-hero.png) — README hero image (a styled illustrative scene; it predates the handbook redesign).
+- [`docs/liveforever-care-brief-hero.png`](docs/liveforever-care-brief-hero.png) — README hero image: the Care brief as served by the live demo on 2026-10-10.
 - [`docs/liveforever-care-brief-v2.png`](docs/liveforever-care-brief-v2.png) — current desktop Care Brief viewport in the handbook design, captured 2026-10-10 (the same capture as `docs/liveforever-care-brief-2026-10-10.png`).
 - [`docs/liveforever-care-brief-ai-draft-2026-10-10.png`](docs/liveforever-care-brief-ai-draft-2026-10-10.png) — the cached AI draft block with Trace values on.
 - [`docs/liveforever-care-brief-mobile.png`](docs/liveforever-care-brief-mobile.png) — current mobile Care Brief screenshot (390px wide, captured 2026-10-10).

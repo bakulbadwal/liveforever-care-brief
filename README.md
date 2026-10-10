@@ -6,7 +6,7 @@
 
 [![LiveForever Care Brief in a clinician-review setting](docs/liveforever-care-brief-hero.png)](https://bakulbadwal.github.io/liveforever-care-brief/#care)
 
-<sub>Illustrative product scene. The interface and all health records shown in this project use one fictional, fully synthetic persona.</sub>
+<sub>The Care brief as served by the live demo on 2026-10-10. The interface and all health records shown in this project use one fictional, fully synthetic persona.</sub>
 
 **[Try the Care Brief](https://bakulbadwal.github.io/liveforever-care-brief/#care)** · [Product case study](CASE_STUDY.md) · [Technical method](docs/TECHNICAL_METHOD.md) · [Extension provenance](docs/BREAK_THE_BARRIER_PROVENANCE.md)
 

@@ -32,11 +32,11 @@ People accumulate health information across wearables, laboratory portals, medic
 
 ### Solution summary
 
-LiveForever combines a deterministic evidence engine with bounded AI interpretation. A user asks a question about longitudinal history; tested Python identifies relevant records, calculates trends and uncertainty, and produces an immutable evidence contract. AI then explains the fixed findings, identifies missing context and alternative hypotheses, and prepares questions for clinician review. It cannot change calculated values, diagnose a condition, prescribe treatment, or invent a source. The Care Brief carries the question, source ledger, uncertainty, and clinician questions into a concise document that the user reviews before choosing whether to print or share it. The public demonstration uses only fictional synthetic data, contains no PHI, and transmits nothing.
+LiveForever combines a deterministic evidence engine with bounded AI interpretation. A user asks a question about longitudinal history; tested Python identifies relevant records, calculates trends and uncertainty, and produces an immutable evidence contract. AI then explains the fixed findings, identifies missing context and alternative hypotheses, and prepares questions for clinician review. It cannot change calculated values, diagnose a condition, prescribe treatment, or invent a source. The Care Brief carries the question, source ledger, uncertainty, and clinician questions into a concise document that the user reviews before choosing whether to print or share it. The public demonstration uses only fictional synthetic data, contains no PHI, and transmits nothing. The hosted demo makes no live model calls: its AI draft was generated once at build time from the locked contract and shipped only after a deterministic verifier confirmed that every number it cites already exists in the contract and that it contains no diagnostic, prescriptive, causal, or proof language. On the page, each cited number is checked against the contract, and a Trace values switch reveals the contract path behind every locked value.
 
 ### Current stage
 
-Working public prototype with a tested Python evidence engine, synthetic longitudinal health data, a bounded AI workflow, a responsive hosted interface, a source-linked Care Brief, technical documentation, and 17 automated tests.
+Working public prototype with a tested Python evidence engine, synthetic longitudinal health data, a bounded AI workflow, a responsive hosted interface, a source-linked Care Brief, a cached AI draft verified against the contract at build time, a Trace values switch, technical documentation, and 51 automated tests.
 
 ### LinkedIn
 

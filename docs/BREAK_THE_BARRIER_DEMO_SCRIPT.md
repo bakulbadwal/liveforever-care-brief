@@ -2,6 +2,8 @@
 
 Target length: **3:45 to 4:20**. Record a clean screen walkthrough; camera bubble is optional. Upload the resulting MP4 directly to the form.
 
+> **Update, 2026-10-10:** the recording script now lives at `~/Desktop/Hackathons/1-break-the-barrier/SCRIPT-2026-10-10.md` (local, outside this repository). The sections and timings below are kept as reference from the September version. The current demo also has the Trace values switch in the top bar and, on the Care brief, the cached AI draft verified against the locked contract; the dated script covers both.
+
 ## 0:00–0:35 — The barrier
 
 **Show:** Care Brief view, with the full interface visible.
@@ -20,7 +22,7 @@ Target length: **3:45 to 4:20**. Record a clean screen walkthrough; camera bubbl
 
 “The Break the Barrier extension is this Care Brief. It converts the same fixed analysis into a patient-controlled clinical handoff. The question and numerical signal appear first. Every source has a ledger entry explaining what it contributed. Uncertainty and missing evidence stay attached instead of disappearing into a disclaimer. The AI prepares questions a clinician can review, such as whether the pattern is meaningful in the broader history and what other context could better explain it.”
 
-**Pause over the locked-values callout.**
+**Pause over the boxed “Values locked by code” item.**
 
 “The core safety design is a separation of authority. Deterministic code owns every value, sample count, warning, and source. AI can explain the evidence, surface missing context, and organize the brief, but it cannot alter a number, invent a source, diagnose, or prescribe. The user reviews the draft and chooses whether to print or share it; this demo transmits nothing.”
 
@@ -34,7 +36,7 @@ Target length: **3:45 to 4:20**. Record a clean screen walkthrough; camera bubbl
 
 **Show:** Data & methods, connected data, quality warnings, then open calculation provenance.
 
-“The demonstration runs with no login, API key, database, or personal health information. All records are synthetic. The public repository includes the Python engine, immutable care-brief contract, bounded AI Skill, technical method, and 17 automated tests. A production version would need secure connectors, consent and deletion controls, access management, and clinical validation before accepting PHI.”
+“The demonstration runs with no login, API key, database, or personal health information. All records are synthetic. The public repository includes the Python engine, immutable care-brief contract, bounded AI Skill, a cached AI draft verified against the contract, technical method, and 51 automated tests. A production version would need secure connectors, consent and deletion controls, access management, and clinical validation before accepting PHI.”
 
 ## 3:50–4:15 — Close
 

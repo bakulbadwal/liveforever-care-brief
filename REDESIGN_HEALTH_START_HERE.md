@@ -8,6 +8,8 @@
 
 **Core implementation commit:** `13d7dd9` (`Build source-linked LiveForever Care Brief`)
 
+**Latest demo iteration commit:** `d3c665a` (`Ship a cached, verified AI draft and show the verification on the page`)
+
 ## Official submission form
 
 **[Open the Break the Barrier submission form](https://docs.google.com/forms/d/e/1FAIpQLSc8nLhq33YpQeZ_pcFWJqFYFV6cJq-v8RLKfJ0zEG0KSWBcQA/viewform?pli=1)**
@@ -24,7 +26,7 @@ This is the direct Google Form URL. The form may retain a draft under the Google
 
 **Product response:** Deterministic Python owns every calculation, interval, quality check, and source status. A bounded AI layer explains the locked evidence, surfaces missing context and alternative hypotheses, and prepares questions for clinician review. The user reviews the brief and controls whether it is printed or shared.
 
-**Current stage:** Working public prototype with synthetic longitudinal data, a tested Python evidence engine, an immutable Care Brief contract, a bounded AI workflow, a responsive interface, technical documentation, and 17 automated tests.
+**Current stage:** Working public prototype with synthetic longitudinal data, a tested Python evidence engine, an immutable Care Brief contract, a bounded AI workflow with a cached AI draft verified against the contract at build time, a Trace values switch that reveals the contract path behind each locked number, a responsive interface in the quick-reference-handbook design, technical documentation, and 51 automated tests.
 
 ## What has already been built
 
@@ -35,14 +37,15 @@ This is the direct Google Form URL. The form may retain a draft under the Google
 - AI permissions and prohibitions, including immutable calculation paths.
 - A dedicated responsive Care Brief interface with a user-controlled print flow.
 - Updated README, case study, provenance, screenshot, and competition framing.
-- Seventeen passing tests and desktop/mobile browser verification.
+- The October 10 handbook redesign (recorded in `DESIGN.md`), the Trace values switch, and the cached AI draft (`demo/ai_draft.json`) with its deterministic verifier (`src/liveforever_lab/ai_draft.py`).
+- Fifty-one passing Python tests, the Node browser-code checks, and desktop/mobile browser verification.
 
 The public demo contains one fictional persona, Maya Chen, and no PHI. It does not claim clinical validation, diagnosis, treatment, EHR integration, or real patient outcomes.
 
 ## Resume this later in five steps
 
 1. Open the independent public demo and verify the Care Brief is still the default view.
-2. Record the new 3.5- to 4.5-minute MP4 using the prepared script. The old Build Week video does not show the Care Brief and should not be reused as the primary submission.
+2. Record the new 3.5- to 4.5-minute MP4 using the prepared script. The dated recording script lives locally at `~/Desktop/Hackathons/1-break-the-barrier/SCRIPT-2026-10-10.md`; `docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md` keeps the reference timings. The old Build Week video does not show the Care Brief and should not be reused as the primary submission.
 3. Paste the prepared bio and Healthcare Problem Scope & Impact response into the Google Form.
 4. Upload the MP4, review the terms yourself, submit, and retain the emailed receipt.
 5. If the product changes before November 1, resubmit the form; only the most recent entry is evaluated.
@@ -50,12 +53,13 @@ The public demo contains one fictional persona, Maya Chen, and no PHI. It does n
 ## Submission files
 
 - [`docs/BREAK_THE_BARRIER_SUBMISSION.md`](docs/BREAK_THE_BARRIER_SUBMISSION.md) — exact paste-ready form answers and positioning.
-- [`docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md`](docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md) — timed screen order and narration.
+- [`docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md`](docs/BREAK_THE_BARRIER_DEMO_SCRIPT.md) — reference screen order and timings; the current recording script is local at `~/Desktop/Hackathons/1-break-the-barrier/SCRIPT-2026-10-10.md`.
 - [`docs/BREAK_THE_BARRIER_CHECKLIST.md`](docs/BREAK_THE_BARRIER_CHECKLIST.md) — final recording and submission checklist.
 - [`docs/BREAK_THE_BARRIER_PROVENANCE.md`](docs/BREAK_THE_BARRIER_PROVENANCE.md) — what existed before and what this extension added.
-- [`docs/liveforever-care-brief-hero.png`](docs/liveforever-care-brief-hero.png) — README hero image.
-- [`docs/liveforever-care-brief-v2.png`](docs/liveforever-care-brief-v2.png) — current desktop Care Brief screenshot.
-- [`docs/liveforever-care-brief-mobile.png`](docs/liveforever-care-brief-mobile.png) — current mobile Care Brief screenshot.
+- [`docs/liveforever-care-brief-hero.png`](docs/liveforever-care-brief-hero.png) — README hero image (a styled illustrative scene; it predates the handbook redesign).
+- [`docs/liveforever-care-brief-v2.png`](docs/liveforever-care-brief-v2.png) — current desktop Care Brief viewport in the handbook design, captured 2026-10-10 (the same capture as `docs/liveforever-care-brief-2026-10-10.png`).
+- [`docs/liveforever-care-brief-ai-draft-2026-10-10.png`](docs/liveforever-care-brief-ai-draft-2026-10-10.png) — the cached AI draft block with Trace values on.
+- [`docs/liveforever-care-brief-mobile.png`](docs/liveforever-care-brief-mobile.png) — current mobile Care Brief screenshot (390px wide, captured 2026-10-10).
 - [`README.md`](README.md) — public product and technical overview.
 - [`CASE_STUDY.md`](CASE_STUDY.md) — product rationale and tradeoffs.
 

@@ -15,7 +15,7 @@
 - [Submission checklist](BREAK_THE_BARRIER_CHECKLIST.md) — recording and form checklist.
 - [Extension provenance](BREAK_THE_BARRIER_PROVENANCE.md) — preserved starting point and new healthcare workflow.
 - [README hero](liveforever-care-brief-hero.png), [desktop product view](liveforever-care-brief-v2.png), and [mobile product view](liveforever-care-brief-mobile.png).
-- [September 5 Care Brief view](liveforever-care-brief-2026-09-05.png) — current readiness, sources, warnings, and local export controls; earlier screenshots remain preserved.
+- [September 5 Care Brief view](liveforever-care-brief-2026-09-05.png) — the previous look (readiness, sources, warnings, local export controls); the current handbook design is in [liveforever-care-brief-2026-10-10.png](liveforever-care-brief-2026-10-10.png) and the AI-draft block in [liveforever-care-brief-ai-draft-2026-10-10.png](liveforever-care-brief-ai-draft-2026-10-10.png).
 
 ## Preserved OpenAI Build Week record
 

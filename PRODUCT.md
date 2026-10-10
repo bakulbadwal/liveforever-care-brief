@@ -49,7 +49,7 @@ Deterministic Python owns every number — effect sizes, intervals, lags, sample
 
 - `demo/analysis.json` — the full generated contract (analysis, plan, care_brief, exports).
 - `demo/ai_draft.json` — the cached, verified AI draft with provenance and the verification result.
-- `docs/liveforever-care-brief-hero.png`, `docs/liveforever-care-brief-v2.png`, `docs/liveforever-care-brief-mobile.png`, `docs/liveforever-care-brief-2026-09-05.png` — current-look screenshots.
+- `docs/liveforever-care-brief-hero.png`, `docs/liveforever-care-brief-v2.png`, `docs/liveforever-care-brief-mobile.png`, `docs/liveforever-care-brief-2026-10-10.png`, `docs/liveforever-care-brief-ai-draft-2026-10-10.png` — current-look screenshots (the 2026-09-05 file and the hero illustration show the previous look).
 - `CASE_STUDY.md`, `docs/TECHNICAL_METHOD.md`, `docs/BREAK_THE_BARRIER_*.md` — rationale, method, provenance, submission answers.
 - Cited literature for CYP1A2 in README (systematic review and meta-analysis links).
 - **Absent, do not fabricate:** clinician testimonials, real patient data, outcome metrics, pilot results, partners, pricing, customers.

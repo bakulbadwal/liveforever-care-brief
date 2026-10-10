@@ -10,7 +10,7 @@
 
 **[Try the Care Brief](https://bakulbadwal.github.io/liveforever-care-brief/#care)** · [Product case study](CASE_STUDY.md) · [Technical method](docs/TECHNICAL_METHOD.md) · [Extension provenance](docs/BREAK_THE_BARRIER_PROVENANCE.md)
 
-[![Tests](https://img.shields.io/badge/tests-41%20passing-147D69)](#run-it)
+[![Tests](https://img.shields.io/badge/tests-51%20passing-147D69)](#run-it)
 [![Python](https://img.shields.io/badge/Python-3.11%2B-192628)](pyproject.toml)
 [![Data](https://img.shields.io/badge/data-100%25%20synthetic-6A5D91)](#privacy-and-safety)
 [![License](https://img.shields.io/badge/license-MIT-E9B949)](LICENSE)
@@ -22,7 +22,7 @@
 | **User:** A serious self-tracker preparing for a clinical conversation | **Evidence engine:** Deterministic Python |
 | **Barrier:** Years of personal health context rarely fit into a short visit | **AI boundary:** Explain fixed evidence; never change calculations, diagnose, or prescribe |
 | **Output:** A concise, source-linked draft the user reviews before sharing | **Public demo:** Static GitHub Pages site; no login, API key, backend, or PHI |
-| **Stage:** Working prototype; pending hackathon entry | **Quality:** 41 Python tests, optional browser-code checks, and desktop/mobile UI verification |
+| **Stage:** Working prototype; pending hackathon entry | **Quality:** 51 Python tests (including the AI-draft verifier), optional browser-code checks, and desktop/mobile UI verification |
 
 LiveForever combines longitudinal wearable signals, habit logs, laboratory trends, and cautious genomic context to answer one practical question at a time, then prepares the result for a more useful clinical conversation:
 
@@ -33,24 +33,54 @@ The hosted demo needs no login, API key, external health service, or live model 
 ## Try It In 30 Seconds
 
 1. Start in **Care brief** to inspect evidence readiness, per-source coverage, quality warnings, uncertainty, and clinician questions.
-2. Open **Snapshot** to compare the primary result, supporting metrics, and nightly recovery timeline.
-3. Toggle the chart between **HRV** and **Sleep**, then hover or tab through individual observations.
-4. Open **Experiment** for the balanced 14-day schedule, then use **Data & methods** to inspect context and calculation provenance.
-5. Choose **Download Markdown**, **Download JSON**, or **Print brief**. Both downloads keep the complete evidence contract, source links, warnings, and plan boundaries; nothing is uploaded.
+2. Switch on **Trace values** in the top bar. Under every locked number, the brief reveals the contract path it came from (for example `→ evidence_summary.primary_effect`). The reveal is CSS-only, off by default, and hidden in print.
+3. Scroll to the **Bounded AI layer** band for the contract ledger (AI may / AI may not / Locked by code) and the cached AI draft beneath it; every number the draft cites is marked green when it exists in the locked contract.
+4. Open **Snapshot** to compare the primary result, supporting metrics, and nightly recovery timeline.
+5. Toggle the chart between **HRV** and **Sleep**, then hover or tab through individual observations.
+6. Open **Experiment** for the balanced 14-day schedule, then use **Data & methods** to inspect context and calculation provenance.
+7. Choose **Download Markdown**, **Download JSON**, or **Print brief**. Both downloads keep the complete evidence contract, source links, warnings, and plan boundaries; nothing is uploaded.
 
 The demo examines whether stopping caffeine by 2 PM is associated with better next-day recovery across 73 paired nights. It reports a `+3.94 ms` HRV difference with a 95% interval of `+1.13 to +6.42` and keeps the result explicitly labeled as an **association only**.
 
-![Care Brief with evidence readiness and local export controls](docs/liveforever-care-brief-2026-09-05.png)
+![Care brief view, October 10, 2026: the title band, evidence readiness, the observed signal, and the boxed values locked by code](docs/liveforever-care-brief-2026-10-10.png)
 
 ## What Makes It Different
 
 - **One question, not a correlation fishing expedition:** each analysis defines an exposure, outcome, lag, and minimum sample before interpreting results.
 - **Calculations outside the model:** Python owns effect sizes, intervals, lags, sample counts, missingness, correlations, PhenoAge, quality grades, and the initial experiment schedule.
-- **GPT-5.6 inside a contract:** the included Codex Skill frames questions, reviews sources, explains fixed results, identifies blind spots, and adapts a plan without altering calculated values.
+- **A model inside a contract:** the included Codex Skill (written for GPT-5.6) frames questions, reviews sources, explains fixed results, identifies blind spots, and adapts a plan without altering calculated values. The demo's cached draft was produced by Claude under the same prompt and verifier; see [The AI layer in the demo](#the-ai-layer-in-the-demo).
 - **Uncertainty stays visible:** minimum-sample warnings, missingness, group balance, confidence intervals, and known confounders remain part of the product experience.
 - **Genetics is context, not a verdict:** a synthetic CYP1A2 marker can prioritize a question but never determines a recommendation.
 - **Local-first privacy:** raw health and genomic records remain local and outside model output, commits, screenshots, and the public demo.
 - **A reviewable handoff, not an AI diagnosis:** the Care Brief carries sources, uncertainty, missing evidence, and clinician questions into a concise user-controlled document.
+
+## The AI Layer In The Demo
+
+The hosted demo makes no live model calls. The Bounded AI layer band on the Care brief shows the full contract ledger (**AI may** / **AI may not** / **Locked by code**) and, beneath it, a cached AI draft: [`demo/ai_draft.json`](demo/ai_draft.json), generated once at build time from the locked `care_brief` contract under the repository Skill's prompt. [`src/liveforever_lab/ai_draft.py`](src/liveforever_lab/ai_draft.py) builds that prompt and the JSON schema the model's answer must match.
+
+A deterministic verifier in the same module checks the draft before it can ship:
+
+- Every number the model cites must already exist in the contract, at the contract's own rounding.
+- Affirmative diagnostic, prescriptive, causal, proof, or treatment language is flagged; negated uses such as "does not establish causation" are allowed.
+- The draft carries the SHA-256 of the contract it was written from, so a regenerated contract fails a stale draft.
+- `ingest` refuses to write a draft that fails verification, and `tests/test_ai_draft.py` re-runs the check on every test run.
+
+Result for the shipped draft: 17 numbers cited, 0 outside the contract, 0 forbidden claims. On the page, every number in the draft is wrapped and shown green when it exists in the locked contract and red when it does not, with a running count ("26 / 26 numbers cited match the locked contract"; 26 on the page because the same numbers appear in several sentences) beside the build-time verifier result. Switch on **Trace values** in the top bar to see, under each locked number, the contract path it comes from; the reveal is CSS-only, off by default, and hidden in print.
+
+![The cached AI draft block with Trace values on: 26 of 26 cited numbers match the locked contract and the build-time verifier passed](docs/liveforever-care-brief-ai-draft-2026-10-10.png)
+
+Provenance recorded in the file: model `claude-fable-5-1 (Anthropic)`, runner "Claude Code, using the prompt and schema from liveforever_lab.ai_draft", generated 2026-10-10. The Skill targets GPT-5.6 through Codex; the shipped demo draft was produced by Claude under the same prompt and rules. The contract and the verifier are model-agnostic, which is the point.
+
+Regenerate the draft with any model:
+
+```bash
+PYTHONPATH=src python3.11 -m liveforever_lab.ai_draft prompt --out /tmp/prompt.md
+PYTHONPATH=src python3.11 -m liveforever_lab.ai_draft schema --out /tmp/schema.json
+# run any model with that prompt and schema, for example:
+codex exec --output-schema /tmp/schema.json -o /tmp/draft.json "$(cat /tmp/prompt.md)"
+PYTHONPATH=src python3.11 -m liveforever_lab.ai_draft ingest --result /tmp/draft.json --model <id> --runner <tool>
+PYTHONPATH=src python3.11 -m liveforever_lab.ai_draft verify
+```
 
 ## Break The Barrier Extension
 
@@ -66,11 +96,14 @@ The extension adds:
 - A responsive Care Brief view with local Markdown/JSON export, printing, source links, and visible quality warnings; the demo transmits no health record and contains no PHI.
 - Evidence readiness derived from sample sufficiency, available intervals, source links, and the existing quality grade. This is a workflow check, not a validated clinical score.
 - Explicit unavailable, early, inconclusive, higher, and lower comparison states. Missing context stays missing; unknown provenance never becomes a claim that data is synthetic or free of PHI.
-- A focused 41-test Python suite plus optional dependency-free JavaScript checks for exports and display boundaries. Invalid dates, duplicate days, ambiguous CSV headers, and non-finite values are rejected before calculation.
+- A cached AI draft, generated once at build time and verified against the locked contract before it ships, shown beside the full contract ledger; and a **Trace values** switch that reveals the contract path behind every locked number.
+- A focused 51-test Python suite (including the AI-draft verifier) plus optional dependency-free JavaScript checks for exports, display boundaries, and the draft's number marks. Invalid dates, duplicate days, ambiguous CSV headers, and non-finite values are rejected before calculation.
 
 This is a workflow prototype, not an EHR integration or clinical device. The intended value is better visit preparation and more efficient review, while preserving professional judgment and the user's control over sharing.
 
 The September 5 iteration strengthens this **pending entry** after the original Build Week submission. It does not change the historical judged artifact or the demo's three effect estimates. See the [dated engineering changelog](docs/ASTRA_CHANGELOG_2026-09-05.md) for exact behavior changes, validation, and limitations.
+
+The October 10 iteration moves the interface to a quick-reference-handbook design (paper and ink rules, a dark spine with numbered tabs, Barlow Condensed and Barlow type, dotted-leader rows, and the boxed "Values locked by code" item; recorded in [DESIGN.md](DESIGN.md)), adds the Trace values switch, and ships the cached, verified AI draft. It does not change the three effect estimates either.
 
 ## Impact Hypothesis
 
@@ -120,6 +153,7 @@ flowchart LR
     B --> C["Immutable analysis.json contract"]
     C --> D["Bounded AI through the Agent Skill"]
     D --> E["Explanation, missing context, and clinician questions"]
+    E --> H["Cached draft, verified against the contract before it ships"]
     C --> F["Interactive evidence dashboard"]
     C --> G["Source-linked Care Brief"]
 ```
@@ -129,6 +163,7 @@ flowchart LR
 | Deterministic Python | Effects, intervals, lags, quality checks, PhenoAge, schedule, and provenance |
 | `analysis.json` | Immutable interface between calculation and interpretation |
 | Agent Skill | Question framing, source review, explanation, alternative hypotheses, and bounded care-brief preparation |
+| `ai_draft.py` | Build-time prompt and JSON schema, the deterministic verifier, and the cached draft the demo shows |
 | Web demo | Inspectable visualization and user-controlled clinical handoff for the fictional evidence record |
 
 ## Demonstration Record
@@ -155,7 +190,7 @@ python3.11 -m http.server 8765 --directory demo
 
 Open `http://localhost:8765/#care`, or use the [hosted demo](https://bakulbadwal.github.io/liveforever-care-brief/#care).
 
-The CLI regenerates only the fictional fixtures and `demo/analysis.json`. Markdown export is prepared by Python in that payload; the browser saves it as `.md` or serializes the same Care Brief contract as `.json`. Markdown includes a readable summary and a complete JSON appendix so secondary outcomes, sample counts, plan stop conditions, and AI boundaries survive the handoff.
+The CLI regenerates only the fictional fixtures and `demo/analysis.json`. If the care-brief contract changes, the cached draft's recorded hash no longer matches and `verify` fails until the draft is regenerated (see [The AI layer in the demo](#the-ai-layer-in-the-demo)). Markdown export is prepared by Python in that payload; the browser saves it as `.md` or serializes the same Care Brief contract as `.json`. Markdown includes a readable summary and a complete JSON appendix so secondary outcomes, sample counts, plan stop conditions, and AI boundaries survive the handoff.
 
 Run the tests:
 
@@ -167,6 +202,12 @@ Optional browser-code regression checks use an already-installed Node runtime an
 
 ```bash
 node tests/test_demo_ui.cjs
+```
+
+Re-check the cached AI draft against the current contract (the test suite does this too):
+
+```bash
+PYTHONPATH=src python3.11 -m liveforever_lab.ai_draft verify
 ```
 
 To inspect failure cases without replacing the main demonstration:
@@ -185,10 +226,11 @@ $liveforever-evidence-lab Investigate whether my caffeine timing is associated w
 
 ## Project Map
 
-- [`src/liveforever_lab/`](src/liveforever_lab/) · Deterministic analysis, care-brief contract, genomics, PhenoAge, synthetic data, and planning.
+- [`src/liveforever_lab/`](src/liveforever_lab/) · Deterministic analysis, care-brief contract, genomics, PhenoAge, synthetic data, planning, and the AI-draft prompt and verifier.
 - [`SKILL.md`](SKILL.md) · Bounded AI workflow, responsibilities, forbidden behavior, and care-brief format.
-- [`demo/`](demo/) · Static interactive application, generated analysis contract, and preserved Build Week interface.
-- [`tests/`](tests/) · Analysis, context, care-brief/export regressions, and a local synthetic UI scenario preview.
+- [`DESIGN.md`](DESIGN.md) · The handbook design system: paper and ink rules, the numbered spine, type, color as state, and the Trace values reveal.
+- [`demo/`](demo/) · Static interactive application, generated analysis contract, cached AI draft (`ai_draft.json`), and preserved Build Week interface.
+- [`tests/`](tests/) · Analysis, context, care-brief/export regressions, AI-draft verification, and a local synthetic UI scenario preview.
 - [`docs/`](docs/) · Technical method, provenance, submission copy, demo script, and checklist.
 - [`docs/README.md`](docs/README.md) · Documentation index for judges and future work.
 

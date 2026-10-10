@@ -6,9 +6,11 @@ Deadline: **November 1, 2026 at 11:59 PM Eastern**. Resubmissions are allowed; o
 
 - [ ] Confirm the independent `liveforever-care-brief` repository and hosted Care Brief URL load.
 - [ ] Confirm the public page shows only Maya Chen's fictional synthetic record.
-- [ ] Run all 17 tests and confirm `demo/analysis.json` is regenerated.
+- [ ] Run all 51 Python tests (`PYTHONPATH=src python3.11 -m unittest discover -s tests`) and `node tests/test_demo_ui.cjs`; confirm `demo/analysis.json` is regenerated.
+- [ ] Run `PYTHONPATH=src python3.11 -m liveforever_lab.ai_draft verify` and confirm the cached draft still matches the contract (17 numbers cited, none unlisted, 0 forbidden claims).
+- [ ] Confirm the Care brief's AI draft block reads 26 / 26 numbers cited with "Build-time verifier: passed", and leave Trace values off until the script calls for it.
 - [ ] Open four tabs: Snapshot, Care brief, Experiment, and Data & methods.
-- [ ] Open `BREAK_THE_BARRIER_DEMO_SCRIPT.md` on the second monitor.
+- [ ] Open the recording script (`~/Desktop/Hackathons/1-break-the-barrier/SCRIPT-2026-10-10.md`; `BREAK_THE_BARRIER_DEMO_SCRIPT.md` keeps the reference timings) on the second monitor.
 
 ## Record and upload
 

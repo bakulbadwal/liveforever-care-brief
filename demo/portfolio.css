@@ -1776,6 +1776,7 @@ h1 {
 }
 
 .ai-draft-count small {
+  margin-left: 0.12em;
   color: var(--muted);
   font-size: 24px;
   font-weight: 600;
@@ -1809,6 +1810,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0 40px;
+  align-items: start;
   border-top: 1px solid var(--hair);
 }
 
@@ -1836,8 +1838,8 @@ h1 {
 .ai-draft-item ul {
   margin: 0;
   padding-left: 18px;
-  font-size: 15px;
-  line-height: 1.5;
+  font-size: 16px;
+  line-height: 1.55;
   list-style: square;
 }
 
@@ -1864,6 +1866,9 @@ mark.cite {
   border-bottom: 2px dotted var(--signal);
   font-weight: 600;
   font-variant-numeric: tabular-nums;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-color 160ms var(--ease-out), box-shadow 160ms var(--ease-out);
 }
 
 mark.cite.bad {
@@ -1872,8 +1877,8 @@ mark.cite.bad {
 }
 
 .trace-on mark.cite.ok {
-  padding: 0 4px;
   background: var(--signal-soft);
+  box-shadow: 0 0 0 3px var(--signal-soft);
   border-bottom-style: solid;
 }
 

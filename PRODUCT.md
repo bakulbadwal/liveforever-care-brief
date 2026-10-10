@@ -34,6 +34,7 @@ Deterministic Python owns every number — effect sizes, intervals, lags, sample
 - All records belong to **Maya Chen, a fictional persona**; every signal is deliberately generated. No PHI anywhere in the repository, demo, screenshots, or exports.
 - Must never claim clinical validation, diagnosis, treatment, EHR integration, or real patient outcomes. Results are labeled "association only"; genomic and laboratory context prioritize questions and never determine recommendations.
 - Production would require consent, identity, deletion, access controls, security review, and clinical workflow validation before accepting PHI.
+- The bounded AI layer is present in the demo as a cached draft (`demo/ai_draft.json`): generated once at build time from the locked contract under the Skill's prompt, verified by `liveforever_lab.ai_draft` before it can ship (every cited number must exist in the contract at the contract's rounding; affirmative diagnostic, prescriptive, causal, proof, or treatment language is flagged; the draft carries the SHA-256 of its contract). The shipped draft was written by Claude Fable 5.1 on 2026-10-10; the Skill targets GPT-5.6 through Codex; the contract and verifier are model-agnostic. The hosted demo makes no live model calls.
 - `demo/analysis.json` is generated output and is not hand-edited. All on-page copy comes from that contract or from `demo/portfolio.js` templates, deep-escaped before render.
 - Video constraint: 3–5 minutes, judged in one batch after Nov 1, 2026 (finalists Dec 1).
 
@@ -47,6 +48,7 @@ Deterministic Python owns every number — effect sizes, intervals, lags, sample
 ## Evidence on Hand
 
 - `demo/analysis.json` — the full generated contract (analysis, plan, care_brief, exports).
+- `demo/ai_draft.json` — the cached, verified AI draft with provenance and the verification result.
 - `docs/liveforever-care-brief-hero.png`, `docs/liveforever-care-brief-v2.png`, `docs/liveforever-care-brief-mobile.png`, `docs/liveforever-care-brief-2026-09-05.png` — current-look screenshots.
 - `CASE_STUDY.md`, `docs/TECHNICAL_METHOD.md`, `docs/BREAK_THE_BARRIER_*.md` — rationale, method, provenance, submission answers.
 - Cited literature for CYP1A2 in README (systematic review and meta-analysis links).

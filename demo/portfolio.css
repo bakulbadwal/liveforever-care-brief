@@ -405,7 +405,38 @@ summary:focus-visible {
 
 .trace-on [data-trace]::after {
   display: block;
-  animation: trace-in 220ms var(--ease-out);
+  animation: trace-in 260ms var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 45ms);
+}
+
+.trace-scan {
+  position: fixed;
+  z-index: 40;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 2px;
+  background: var(--signal);
+  box-shadow: 0 0 18px 2px rgba(15, 107, 87, 0.45), 0 0 48px 10px rgba(15, 107, 87, 0.18);
+  pointer-events: none;
+  animation: trace-scan 820ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes trace-scan {
+  from { transform: translateY(-4px); opacity: 0; }
+  12% { opacity: 1; }
+  to { transform: translateY(100vh); opacity: 0; }
+}
+
+/* The 7-day mean draws itself in when a view opens; points are already there. */
+.chart-mean {
+  stroke-dasharray: 2400;
+  stroke-dashoffset: 2400;
+  animation: chart-draw 1100ms cubic-bezier(0.22, 1, 0.36, 1) 120ms forwards;
+}
+
+@keyframes chart-draw {
+  to { stroke-dashoffset: 0; }
 }
 
 .trace-on .reading-fact {
@@ -1685,6 +1716,167 @@ h1 {
   list-style: none;
 }
 
+/* AI draft: what the bounded model actually wrote, every number checked on the page */
+
+.ai-draft {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1.5px solid var(--rule);
+}
+
+.ai-draft .kicker {
+  color: var(--ai);
+}
+
+.ai-draft .kicker::before {
+  background: var(--ai);
+}
+
+.ai-draft-head {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.42fr);
+  gap: 32px;
+  align-items: start;
+}
+
+.ai-draft h3 {
+  font-size: 26px;
+}
+
+.ai-draft-provenance {
+  max-width: 68ch;
+  margin: 10px 0 0;
+  color: var(--ink-2);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.ai-draft-provenance code {
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+.ai-draft-check {
+  padding: 18px 20px 16px;
+  display: grid;
+  gap: 6px;
+  color: var(--ink);
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  box-shadow: 0 10px 26px -18px rgba(16, 19, 21, 0.55);
+}
+
+.ai-draft-count {
+  font-family: var(--display);
+  font-size: 46px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  color: var(--signal);
+}
+
+.ai-draft-count small {
+  color: var(--muted);
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.ai-draft-count-label {
+  font-size: 14px;
+  color: var(--ink-2);
+}
+
+.ai-draft-build {
+  padding-top: 8px;
+  border-top: 1px solid var(--hair);
+  font-family: var(--display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ai-draft-build.ok {
+  color: var(--signal);
+}
+
+.ai-draft-build.bad {
+  color: var(--warn);
+}
+
+.ai-draft-body {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 40px;
+  border-top: 1px solid var(--hair);
+}
+
+.ai-draft-item {
+  padding: 16px 0 18px;
+  border-bottom: 1px solid var(--hair);
+}
+
+.ai-draft-item h4 {
+  margin: 0 0 8px;
+  font-family: var(--display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.ai-draft-item p {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.55;
+}
+
+.ai-draft-item ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 15px;
+  line-height: 1.5;
+  list-style: square;
+}
+
+.ai-draft-item li + li {
+  margin-top: 8px;
+}
+
+.ai-draft-empty p {
+  max-width: 68ch;
+  margin: 8px 0 0;
+  color: var(--ink-2);
+  font-size: 15px;
+}
+
+.ai-draft-empty code {
+  font-family: var(--mono);
+  font-size: 13px;
+}
+
+mark.cite {
+  padding: 0 1px;
+  color: var(--signal);
+  background: transparent;
+  border-bottom: 2px dotted var(--signal);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+mark.cite.bad {
+  color: var(--warn);
+  border-bottom: 2px solid var(--warn);
+}
+
+.trace-on mark.cite.ok {
+  padding: 0 4px;
+  background: var(--signal-soft);
+  border-bottom-style: solid;
+}
+
 /* ------------------------------------------------------------------ */
 /* Experiment                                                          */
 /* ------------------------------------------------------------------ */
@@ -2201,6 +2393,11 @@ h1 {
 
   .ai-role-head {
     flex-wrap: wrap;
+  }
+
+  .ai-draft-head,
+  .ai-draft-body {
+    grid-template-columns: 1fr;
   }
 
   .chart-wrap {

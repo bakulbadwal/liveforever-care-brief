@@ -1,0 +1,67 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-10-10T17:03:26Z",
+  "generator": {
+    "skill": "liveforever-evidence-lab",
+    "runner": "Claude Code, using the prompt and schema from liveforever_lab.ai_draft",
+    "model": "claude-fable-5-1 (Anthropic)",
+    "mode": "Generated once at build time from the locked contract; the hosted demo makes no live model calls."
+  },
+  "inputs": {
+    "contract_sha256": "1a2c660b605d0db35646d8ad600ae86913f9da8647c3e17f1cf39db99e080690",
+    "prompt_sha256": "8a0b6d86fe6edf80dd86a226cc7b4217da65b12da81c6b75b900c852a884bf23"
+  },
+  "draft": {
+    "question_for_review": "Does stopping caffeine by 2 PM improve next-day recovery, as measured by nightly HRV?",
+    "why_this_is_being_raised": "Maya's record pairs 73 nights of caffeine timing with the following night's recovery. Cutoff nights show higher HRV on average, and she would like a clinician's read before changing anything. The comparison is observational and comes from a synthetic demonstration record.",
+    "observed_signal": "Across 73 paired nights, cutoff nights were followed by 3.94 ms higher nightly HRV than usual-timing nights (95% interval +1.13 to +6.42; 36 cutoff and 37 usual nights). Sleep duration ran +0.30 h and resting heart rate -1.38 bpm in the same direction (37 and 38 nights each). The interval does not include zero, which makes this an observed association worth discussing, not a result that stands on its own.",
+    "evidence_and_provenance": "Four source layers were supplied: a wearable recovery record (80 recorded days), the caffeine and context log (73 paired nights), laboratory context (10 of 10 required inputs present), and a genomic hypothesis marker. Only the wearable and habit sources enter the estimate; laboratory and genomic context are excluded by design. Calendar coverage is 95%, the evidence grade is B (85/100), and 2 quality warnings stay attached.",
+    "uncertainty_and_missing_context": [
+      "Cutoff days may differ in other ways, such as lighter training, less alcohol, or earlier bedtimes; the log records these, but the estimate does not adjust for them.",
+      "Illness, travel, work stress, and sleep environment were not captured and can move HRV by more than the observed difference.",
+      "Device noise and the missing calendar days (coverage 95%) add uncertainty that the interval only partly reflects.",
+      "Symptoms, medications, supplements, and schedule changes over the same dates have not been reviewed alongside the data."
+    ],
+    "what_this_does_not_establish": [
+      "It does not establish that caffeine timing caused the higher HRV; the comparison is observational within one person's record.",
+      "It is not a diagnosis, a sign of a condition, or evidence about anyone other than this fictional record.",
+      "A higher average does not mean every cutoff night was better, and a 3.94 ms difference says nothing about how it feels or matters clinically."
+    ],
+    "questions_for_clinician": [
+      "Given Maya's history, is a 3.94 ms HRV difference large enough to matter, or within normal night-to-night variation?",
+      "Which of the logged factors, training, alcohol, or bedtime, would you want adjusted for before reading this pattern?",
+      "Is there any reason the 14-day caffeine-timing retest would be unwise or should be modified for her?",
+      "What would make a future comparison more useful: symptoms, a medication list, or a different outcome than HRV?"
+    ],
+    "proposed_next_step": "A balanced 14-day retest is drafted for discussion: cutoff and usual-timing days alternate while caffeine total, training, alcohol, the device, and medications stay as they are. The result counts as a replication candidate only if both conditions reach 7 observed nights and the interval excludes zero; otherwise it is labeled inconclusive. Nothing starts before this is discussed.",
+    "review_and_sharing_status": "Draft for clinician review; not medical advice. Maya reviews every field and decides whether to print or share it; nothing is transmitted by the demo."
+  },
+  "verification": {
+    "verifier": "liveforever_lab.ai_draft.verify",
+    "checked_at": "2026-10-10T17:03:26Z",
+    "numbers_cited": [
+      "2",
+      "73",
+      "3.94",
+      "95",
+      "1.13",
+      "6.42",
+      "36",
+      "37",
+      "0.3",
+      "1.38",
+      "38",
+      "80",
+      "10",
+      "85",
+      "100",
+      "14",
+      "7"
+    ],
+    "unlisted_numbers": [],
+    "forbidden_claims": [],
+    "missing_sections": [],
+    "contract_sha256_matches": true,
+    "ok": true
+  }
+}

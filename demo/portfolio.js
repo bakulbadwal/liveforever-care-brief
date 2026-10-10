@@ -3,6 +3,7 @@
 
   var state = {
     payload: null,
+    aiDraft: null,
     metric: 'hrv_ms',
     view: 'care'
   };
@@ -71,6 +72,86 @@
       '<span>', label, '</span>',
       '<div><strong>', value, '</strong><p>', description, '</p></div>',
       '</div>'
+    ].join('');
+  }
+
+  // Every number the bounded model may cite: numeric leaves of the locked contract, numbers
+  // inside the contract's own sentences, and the two display forms of coverage the page shows.
+  function contractValueSet(contract) {
+    var allowed = {};
+    function canonical(token) {
+      var value = Number(token);
+      return Number.isFinite(value) ? String(Math.abs(value)) : null;
+    }
+    (function walk(value) {
+      if (Array.isArray(value)) { value.forEach(walk); return; }
+      if (value && typeof value === 'object') { Object.keys(value).forEach(function (key) { walk(value[key]); }); return; }
+      if (typeof value === 'number' && Number.isFinite(value)) { allowed[canonical(value)] = true; }
+      if (typeof value === 'string') {
+        (value.match(/\d+(?:\.\d+)?/g) || []).forEach(function (token) { var c = canonical(token); if (c) allowed[c] = true; });
+      }
+    })(contract);
+    var coverage = contract && contract.evidence_summary && contract.evidence_summary.quality && contract.evidence_summary.quality.coverage;
+    if (typeof coverage === 'number') {
+      allowed[String(Math.round(coverage * 100))] = true;
+      allowed[String(Number((coverage * 100).toFixed(1)))] = true;
+    }
+    return allowed;
+  }
+
+  // Escape prose and wrap each number: ok when it exists in the contract, bad when it does not.
+  function markNumbers(text, allowed, tally) {
+    return String(text).split(/(\d+(?:\.\d+)?)/g).map(function (part, index) {
+      if (index % 2 === 0) return escapeText(part);
+      var ok = Object.prototype.hasOwnProperty.call(allowed, String(Math.abs(Number(part))));
+      tally[ok ? 'ok' : 'bad'] += 1;
+      return '<mark class="cite ' + (ok ? 'ok' : 'bad') + '" title="' + (ok ? 'Matches a value in the locked contract' : 'Not in the locked contract') + '">' + escapeText(part) + '</mark>';
+    }).join('');
+  }
+
+  function renderAiDraft(doc, contract) {
+    if (!doc || !doc.draft || !doc.generator) {
+      return '<section class="ai-draft ai-draft-empty"><p class="kicker">AI draft</p><p>No cached AI draft is included in this build. Generate one with <code>python3.11 -m liveforever_lab.ai_draft</code>; it ships only after verification passes.</p></section>';
+    }
+    var allowed = contractValueSet(contract);
+    var tally = { ok: 0, bad: 0 };
+    var draft = doc.draft;
+    function prose(key, label) {
+      return draft[key] ? '<div class="ai-draft-item"><h4>' + label + '</h4><p>' + markNumbers(draft[key], allowed, tally) + '</p></div>' : '';
+    }
+    function list(key, label) {
+      var items = Array.isArray(draft[key]) ? draft[key] : [];
+      return items.length ? '<div class="ai-draft-item"><h4>' + label + '</h4><ul>' + items.map(function (item) { return '<li>' + markNumbers(item, allowed, tally) + '</li>'; }).join('') + '</ul></div>' : '';
+    }
+    var body = [
+      prose('observed_signal', 'Observed signal'),
+      prose('why_this_is_being_raised', 'Why this is being raised'),
+      prose('evidence_and_provenance', 'Evidence and provenance'),
+      list('uncertainty_and_missing_context', 'Uncertainty and missing context'),
+      list('what_this_does_not_establish', 'What this does not establish'),
+      list('questions_for_clinician', 'Questions for a clinician'),
+      prose('proposed_next_step', 'Proposed next step'),
+      prose('review_and_sharing_status', 'Review and sharing status')
+    ].join('');
+    var generated = String(doc.generated_at || '').slice(0, 10);
+    var verification = doc.verification || {};
+    var buildOk = verification.ok === true;
+    return [
+      '<section class="ai-draft" aria-labelledby="ai-draft-heading">',
+        '<div class="ai-draft-head">',
+          '<div>',
+            '<p class="kicker">AI draft &middot; cached at build time</p>',
+            '<h3 id="ai-draft-heading">What the model wrote from the locked contract</h3>',
+            '<p class="ai-draft-provenance">Produced by ', escapeText(doc.generator.model || 'an unnamed model'), ' through ', escapeText(doc.generator.runner || 'an unnamed runner'), generated ? ' on ' + escapeText(generated) : '', ' under the <code>', escapeText(doc.generator.skill || ''), '</code> Skill. ', escapeText(doc.generator.mode || ''), '</p>',
+          '</div>',
+          '<div class="ai-draft-check" role="status">',
+            '<span class="ai-draft-count">', String(tally.ok), '<small>/ ', String(tally.ok + tally.bad), '</small></span>',
+            '<span class="ai-draft-count-label">numbers cited match the locked contract</span>',
+            '<span class="ai-draft-build ', buildOk ? 'ok' : 'bad', '">Build-time verifier: ', buildOk ? 'passed' : 'failed', ' &middot; ', String((verification.forbidden_claims || []).length), ' forbidden claims</span>',
+          '</div>',
+        '</div>',
+        '<div class="ai-draft-body">', body, '</div>',
+      '</section>'
     ].join('');
   }
 
@@ -372,6 +453,7 @@
               '<ul class="ai-paths">', contractList(contract.immutable_paths), '</ul>',
             '</div>',
           '</div>',
+          renderAiDraft(state.aiDraft, state.payload.care_brief),
         '</section>',
       '</section>',
 
@@ -661,7 +743,7 @@
       '<title id="chart-title">Recovery timeline</title>',
       '<desc id="chart-description">', meta.axis, ' by prior-day caffeine timing. Use Tab to inspect individual points.</desc>',
       grid,
-      '<path d="', pathParts.join(' '), '" fill="none" stroke="#0f6b57" stroke-width="2.25"/>',
+      '<path class="chart-mean" d="', pathParts.join(' '), '" fill="none" stroke="#0f6b57" stroke-width="2.25"/>',
       dots,
       dates,
       '<text x="', left, '" y="13" fill="#6b7276" font-size="11.5">', meta.axis, '</text>'
@@ -718,8 +800,19 @@
   document.querySelectorAll('[data-trace-toggle]').forEach(function (button) {
     button.addEventListener('click', function () {
       var on = !document.body.classList.contains('trace-on');
+      document.querySelectorAll('[data-trace]').forEach(function (element, index) {
+        element.style.setProperty('--i', String(index));
+      });
       document.body.classList.toggle('trace-on', on);
       button.setAttribute('aria-pressed', String(on));
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (on && !reduced) {
+        var scan = document.createElement('div');
+        scan.className = 'trace-scan';
+        scan.setAttribute('aria-hidden', 'true');
+        document.body.appendChild(scan);
+        window.setTimeout(function () { scan.remove(); }, 900);
+      }
     });
   });
 
@@ -739,12 +832,21 @@
     printDetails.forEach(function (detail) { detail.open = false; });
   });
 
-  fetch('analysis.json')
-    .then(function (response) {
+  Promise.all([
+    fetch('analysis.json').then(function (response) {
       if (!response.ok) {
         throw new Error('Could not load analysis (' + response.status + ')');
       }
       return response.json();
+    }),
+    fetch('ai_draft.json').then(function (response) {
+      return response.ok ? response.json() : null;
+    }).catch(function () { return null; })
+  ])
+    .then(function (loaded) {
+      var doc = loaded[1];
+      state.aiDraft = doc && doc.draft && doc.generator && doc.inputs ? doc : null;
+      return loaded[0];
     })
     .then(render)
     .catch(function (error) {

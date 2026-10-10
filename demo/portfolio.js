@@ -528,7 +528,7 @@
 
           '<section class="method-panel">',
             '<h2>Calculation method</h2>',
-            '<p class="panel-lede">Deterministic Python produces every displayed value. The LiveForever Codex Skill uses GPT-5.6 to explain the result and adapt the retest without changing the calculations.</p>',
+            '<p class="panel-lede">Deterministic Python produces every displayed value. The LiveForever Skill lets a bounded model explain the result and adapt the retest without changing the calculations; the Skill is written for GPT-5.6 through Codex, and the demo&#39;s cached draft was written under the same contract and verified against it.</p>',
             '<details class="method-details" id="method-details">',
               '<summary>Show calculation and provenance</summary>',
               '<div class="method-content">',

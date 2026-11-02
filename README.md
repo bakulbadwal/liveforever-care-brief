@@ -22,7 +22,7 @@
 | **User:** A patient with years of wearable, lab, and habit history preparing for a short clinical visit | **Evidence engine:** Deterministic Python |
 | **Barrier:** Years of personal health context rarely fit into a short visit | **AI boundary:** Explain fixed evidence; never change calculations, diagnose, or prescribe |
 | **Output:** A concise, source-linked draft the user reviews before sharing | **Public demo:** Static GitHub Pages site; no login, API key, backend, or PHI |
-| **Stage:** Working prototype; Break the Barrier 2026 entry | **Quality:** 51 Python tests (including the AI-draft verifier), optional browser-code checks, and desktop/mobile UI verification |
+| **Stage:** Working prototype; submitted to Break the Barrier 2026 on 2026-11-01 | **Quality:** 51 Python tests (including the AI-draft verifier), optional browser-code checks, and desktop/mobile UI verification |
 
 LiveForever combines longitudinal wearable signals, habit logs, laboratory trends, and cautious genomic context to answer one practical question at a time, then prepares the result for a more useful clinical conversation:
 

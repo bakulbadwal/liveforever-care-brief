@@ -2,7 +2,7 @@
 
 **Deadline:** November 1, 2026 at 11:59 PM Eastern
 
-**Status:** Product extension published independently; video and form submission intentionally deferred.
+**Status:** Submitted to Break the Barrier on 2026-11-01 (slide deck + form). Finalists announced Dec 1, 2026.
 
 **Repository:** `bakulbadwal/liveforever-care-brief`
 
